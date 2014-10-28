@@ -25,7 +25,7 @@ bool BirdSprite::init() {
 
 bool BirdSprite::createBird(){
 	this->createBirdByRandom();
-	if(Sprite::initWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName(this->birdName))) {
+	if(Sprite::initWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName(this->birdName))) {
 		// init idle status
 		//create the bird animation
 		Animation* animation = this->createAnimation(this->birdNameFormat.c_str(), 3, 10);
@@ -67,7 +67,7 @@ Animation* BirdSprite::createAnimation(const char *fmt, int count, float fps) {
     animation->setDelayPerUnit(1/fps);
 	for (int i = 0; i < count; i++){
 		const char *filename = String::createWithFormat(fmt, i)->getCString();
-		SpriteFrame *frame = AtlasLoader::getInstance()->getSpriteFrameByName(filename);
+		SpriteFrame *frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(filename);
 		animation->addSpriteFrame(frame);
 	}
 	return animation;
@@ -91,20 +91,20 @@ void BirdSprite::createBirdByRandom(){
 	switch (type)
 	{
 	case 0:
-		this->birdName = "bird0_0";
-		this->birdNameFormat = "bird0_%d";
+		this->birdName = "bird0_0.png";
+		this->birdNameFormat = "bird0_%d.png";
 		break;
 	case 1:
-		this->birdName = "bird1_0";
-		this->birdNameFormat = "bird1_%d";
+		this->birdName = "bird1_0.png";
+		this->birdNameFormat = "bird1_%d.png";
 		break;
 	case 2:
-		this->birdName = "bird2_0";
-		this->birdNameFormat = "bird2_%d";
+		this->birdName = "bird2_0.png";
+		this->birdNameFormat = "bird2_%d.png";
 		break;
 	default:
-		this->birdName = "bird2_0";
-		this->birdNameFormat = "bird2_%d";
+		this->birdName = "bird2_0.png";
+		this->birdNameFormat = "bird2_%d.png";
 		break;
 	}
 }

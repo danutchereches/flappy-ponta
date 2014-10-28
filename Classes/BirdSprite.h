@@ -1,6 +1,5 @@
 #pragma once
 #include "cocos2d.h"
-#include "AtlasLoader.h"
 
 using namespace cocos2d;
 
@@ -83,10 +82,10 @@ private:
 	ActionState currentStatus;
 
 	//the bird name will be created by random
-	string birdName;
+	std::string birdName;
 
 	//the bird name format depends on the bird name we have rendom created before
-	string birdNameFormat;
+	std::string birdNameFormat;
 
 	//record the first time into the game.
 	unsigned int isFirstTime;

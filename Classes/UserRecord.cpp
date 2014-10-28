@@ -26,9 +26,8 @@ UserRecord* UserRecord::getInstance(){
 }
 
 void UserRecord::saveIntegerToUserDefault(const char* key, int score){
-	UserDefault::getInstance()->setIntegerForKey(key,score);	
+	UserDefault::getInstance()->setIntegerForKey(key,score);
 }
-
 
 int UserRecord::readIntegerFromUserDefault(const char* key){
 	int score = UserDefault::getInstance()->getIntegerForKey(key);

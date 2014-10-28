@@ -1,5 +1,6 @@
+#pragma once
+
 #include "cocos2d.h"
-#include "AtlasLoader.h"
 #include "SimpleAudioEngine.h"
 #include "WelcomeScene.h"
 #include "BackgroundLayer.h"

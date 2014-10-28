@@ -1,7 +1,6 @@
 #pragma once
 
 #include "cocos2d.h"
-#include "AtlasLoader.h"
 #include "GameLayer.h"
 #include "GameScene.h"
 #include "Number.h"
@@ -70,10 +69,10 @@ private:
 	Sprite* tutorialSprite;
 
 	Sprite* whiteSprite;
-    
-    int currentScore;
-    
-    int bestScore;
+	
+	int currentScore;
+	
+	int bestScore;
 	
 	int tmpScore;
 

@@ -1,7 +1,7 @@
-﻿#pragma once
+#pragma once
 
-#include "AtlasLoader.h"
 #include "SimpleAudioEngine.h"
+#include "AppDelegate.h"
 #include "GameScene.h"
 #include "time.h"
 #include "cocos2d.h"
@@ -27,6 +27,8 @@ private:
      */
 	void menuStartCallback(Object *sender);
     
+	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+	
 	/**
      * This method is make the land have a scroll animation
      */

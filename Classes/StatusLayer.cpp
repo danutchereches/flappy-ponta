@@ -11,11 +11,11 @@ bool StatusLayer::init(){
 		return false;
 	}
 	// init numbers
-    this->bestScore = 0;
-    this->currentScore = 0;
+	this->bestScore = 0;
+	this->currentScore = 0;
 	this->isNewRecord = false;
-	Number::getInstance()->loadNumber(NUMBER_FONT.c_str(), "font_0%02d", 48);
-    Number::getInstance()->loadNumber(NUMBER_SCORE.c_str(), "number_score_%02d");
+	Number::getInstance()->loadNumber(NUMBER_FONT.c_str(), "font_0%02d.png", 48);
+	Number::getInstance()->loadNumber(NUMBER_SCORE.c_str(), "number_score_%02d.png");
 	this->visibleSize = Director::getInstance()->getVisibleSize();
 	this->originPoint = Director::getInstance()->getVisibleOrigin();
 	this->showReadyStatus();
@@ -27,12 +27,12 @@ void StatusLayer::showReadyStatus() {
 	scoreSprite = (Sprite *)Number::getInstance()->convert(NUMBER_FONT.c_str(), 0);
 	scoreSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2,this->originPoint.y + this->visibleSize.height *5/6));
 	this->addChild(scoreSprite);
-
-	getreadySprite = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("text_ready"));
+	
+	getreadySprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("text_ready.png"));
 	getreadySprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2, this->originPoint.y + this->visibleSize.height *2/3));
 	this->addChild(getreadySprite);
-
-	tutorialSprite = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("tutorial"));
+	
+	tutorialSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("tutorial.png"));
 	tutorialSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2, this->originPoint.y + this->visibleSize.height * 1/2));
 	this->addChild(tutorialSprite);
 }
@@ -43,9 +43,9 @@ void StatusLayer::showStartStatus() {
 }
 
 void StatusLayer::showOverStatus(int curScore, int bestScore) {
-    this->currentScore = curScore;
-    this->bestScore = bestScore;
-    if(curScore > bestScore){
+	this->currentScore = curScore;
+	this->bestScore = bestScore;
+	if(curScore > bestScore){
 		this->bestScore = curScore;
 		this->isNewRecord = true;
 	}else{
@@ -72,7 +72,7 @@ void StatusLayer::onGameEnd(int curScore, int bestScore){
 
 void StatusLayer::loadWhiteSprite(){
 	//this white sprite is used for blinking the screen for a short while
-	whiteSprite = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("white"));
+	whiteSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("white.png"));
 	whiteSprite->setScale(100);
 	whiteSprite->setOpacity(0);
 	this->addChild(whiteSprite,10000);
@@ -83,89 +83,90 @@ void StatusLayer::blinkFullScreen(){
 	auto fadeOut = FadeOut::create(0.1f);
 	auto fadeIn = FadeIn::create(0.1f);
 	auto blinkAction = Sequence::create(fadeIn,fadeOut,NULL);
-    CallFunc *actionDone = CallFunc::create(bind(&StatusLayer::fadeInGameOver, this));
-    auto sequence = Sequence::createWithTwoActions(blinkAction, actionDone);
-    whiteSprite->stopAllActions();
+	CallFunc *actionDone = CallFunc::create(bind(&StatusLayer::fadeInGameOver, this));
+	auto sequence = Sequence::createWithTwoActions(blinkAction, actionDone);
+	whiteSprite->stopAllActions();
 	whiteSprite->runAction(sequence);
 }
 
-void StatusLayer::fadeInGameOver(){    
-    // create the game over panel
-	Sprite* gameoverSprite = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("text_game_over"));
+void StatusLayer::fadeInGameOver(){	
+	// create the game over panel
+	Sprite* gameoverSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("text_game_over.png"));
 	gameoverSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2, this->originPoint.y + this->visibleSize.height *2/3));
 	this->addChild(gameoverSprite);
 	auto gameoverFadeIn = FadeIn::create(0.5f);
-    
-    // Start next action
+	
+	// Start next action
 	CallFunc *actionDone = CallFunc::create(bind(&StatusLayer::jumpToScorePanel, this));
-    auto sequence = Sequence::createWithTwoActions(gameoverFadeIn, actionDone);
-    gameoverSprite->stopAllActions();
+	auto sequence = Sequence::createWithTwoActions(gameoverFadeIn, actionDone);
+	gameoverSprite->stopAllActions();
 	gameoverSprite->runAction(sequence);
 }
 
-void StatusLayer::jumpToScorePanel(){    
-    // create the score panel
-    Sprite* scorepanelSprite = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("score_panel"));
+void StatusLayer::jumpToScorePanel()
+{
+	// create the score panel
+	Sprite* scorepanelSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("score_panel.png"));
 	scorepanelSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2, this->originPoint.y - scorepanelSprite->getContentSize().height));
 	this->addChild(scorepanelSprite);
-        
+		
 	//display the  best score on the score panel
 	auto bestScoreSprite = (Sprite *)Number::getInstance()->convert(NUMBER_SCORE.c_str(), this->bestScore, Gravity::GRAVITY_RIGHT);
 	bestScoreSprite->setAnchorPoint(Point(1, 1));
 	bestScoreSprite->setPosition(scorepanelSprite->getContentSize().width - 28 ,
 		50);
 	scorepanelSprite->addChild(bestScoreSprite);
-    
-    
+	
+	
 	string medalsName = this->getMedalsName(currentScore);
 	if(medalsName != "") {
-		Sprite* medalsSprite = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName(medalsName));
+		Sprite* medalsSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName(medalsName));
 		medalsSprite->addChild(this->blink);
 		medalsSprite->setPosition(54, 58);
 		scorepanelSprite->addChild(medalsSprite);
 	}
-    
+	
 	//if the current score is higher than the best score.
 	//the panel will appear a "new" tag.
 	if(this->isNewRecord){
-		Sprite* newTagSprite = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("new"));
+		Sprite* newTagSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("new.png"));
 		newTagSprite->setPosition(-16, 12);
 		bestScoreSprite->addChild(newTagSprite);
 	}
 	
-    // Start next action
+	// Start next action
 	auto scorePanelMoveTo = MoveTo::create(0.8f ,Point(this->originPoint.x + this->visibleSize.width / 2,this->originPoint.y + this->visibleSize.height/2 - 10.0f));
 	// add variable motion for the action
 	EaseExponentialOut* sineIn = EaseExponentialOut::create(scorePanelMoveTo);
 	CallFunc *actionDone = CallFunc::create(bind(&StatusLayer::fadeInRestartBtn, this));
-    auto sequence = Sequence::createWithTwoActions(sineIn, actionDone);
-    scorepanelSprite->stopAllActions();
+	auto sequence = Sequence::createWithTwoActions(sineIn, actionDone);
+	scorepanelSprite->stopAllActions();
 	SimpleAudioEngine::getInstance()->playEffect("sfx_swooshing.ogg");
 	scorepanelSprite->runAction(sequence);
 }
 
 void StatusLayer::fadeInRestartBtn(){
 	Node * tmpNode = Node::create();
-    
+	
 	//create the restart menu;
-	Sprite* restartBtn = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("button_play"));
-	Sprite* restartBtnActive = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("button_play"));
+	Sprite* restartBtn = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_play.png"));
+	Sprite* restartBtnActive = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_play.png"));
 	restartBtnActive->setPositionY(-4);
 	auto  menuItem = MenuItemSprite::create(restartBtn,restartBtnActive,NULL,CC_CALLBACK_1(StatusLayer::menuRestartCallback,this));
-    auto menu = Menu::create(menuItem,NULL);
+	auto menu = Menu::create(menuItem,NULL);
 	menu->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2 - restartBtn->getContentSize().width / 2, this->originPoint.y + this->visibleSize.height * 2 / 7 - 10.0f));
 	tmpNode->addChild(menu);
-    
-    
+	
+	
 	//create the rate button. however ,this button is not available yet = =
-	Sprite* rateBtn = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("button_score"));
+	Sprite* rateBtn = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_score.png"));
 	rateBtn->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2 + rateBtn->getContentSize().width / 2, this->originPoint.y + this->visibleSize.height * 2 / 7 - 10.0f));
 	tmpNode->addChild(rateBtn);
 	this->addChild(tmpNode);
-    
+	
 	//fade in the two buttons
 	auto fadeIn = FadeIn::create(0.1f);
-    //tmpNode->stopAllActions();
+	//tmpNode->stopAllActions();
 	//tmpNode->runAction(fadeIn);
 
 	CallFunc *actionDone = CallFunc::create(bind(&StatusLayer::refreshScoreCallback,this));
@@ -185,7 +186,7 @@ void StatusLayer::refreshScoreExecutor(float dt){
 	}
 	scoreSprite = (Sprite *)Number::getInstance()->convert(NUMBER_SCORE.c_str(), this->tmpScore, Gravity::GRAVITY_RIGHT);
 	scoreSprite->setAnchorPoint(Point(1,0));
-	scoreSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width * 3 / 4 + 20.0f, this->originPoint.y + this->visibleSize.height *  1 / 2));
+	scoreSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width * 0.86f, this->originPoint.y + this->visibleSize.height *  1 / 2));
 	scoreSprite->setTag(CURRENT_SCORE_SPRITE_TAG);
 	this->addChild(scoreSprite,1000);
 	this->tmpScore++;
@@ -195,17 +196,17 @@ void StatusLayer::refreshScoreExecutor(float dt){
 }
 
 void StatusLayer::setBlinkSprite() {
-	this->blink = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("blink_00"));
+	this->blink = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("blink_00.png"));
 	Animation *animation = Animation::create();
-    animation->setDelayPerUnit(0.1f);
+	animation->setDelayPerUnit(0.1f);
 	for (int i = 0; i < 3; i++){
-		const char *filename = String::createWithFormat("blink_%02d", i)->getCString();
-		SpriteFrame *frame = AtlasLoader::getInstance()->getSpriteFrameByName(filename);
+		const char *filename = String::createWithFormat("blink_%02d.png", i)->getCString();
+		SpriteFrame *frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(filename);
 		animation->addSpriteFrame(frame);
 	}
 	for (int i = 2; i >= 0; i--){
-		const char *filename = String::createWithFormat("blink_%02d", i)->getCString();
-		SpriteFrame *frame = AtlasLoader::getInstance()->getSpriteFrameByName(filename);
+		const char *filename = String::createWithFormat("blink_%02d.png", i)->getCString();
+		SpriteFrame *frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(filename);
 		animation->addSpriteFrame(frame);
 	}
 	auto animate = Animate::create(animation);
@@ -240,7 +241,7 @@ string StatusLayer::getMedalsName(int score){
 
 void StatusLayer::menuRestartCallback(Object* pSender){
 	SimpleAudioEngine::getInstance()->playEffect("sfx_swooshing.ogg");
-    auto scene = GameScene::create();
-    TransitionScene *transition = TransitionFade::create(1, scene);
-    Director::getInstance()->replaceScene(transition);
+	auto scene = GameScene::create();
+	TransitionScene *transition = TransitionFade::create(1, scene);
+	Director::getInstance()->replaceScene(transition);
 }

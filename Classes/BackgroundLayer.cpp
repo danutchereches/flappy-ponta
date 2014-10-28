@@ -13,9 +13,9 @@ bool BackgroundLayer::init(){
 	//create the background image according to the current time;
 	Sprite *background;
 	if(hour >= 6 && hour <= 17){
-		 background = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("bg_day"));
+		 background = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("bg_day.png"));
 	}else{
-		background = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("bg_night"));
+		background = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("bg_night.png"));
 	}
 	background->setAnchorPoint(Point::ZERO);
 	background->setPosition(Point::ZERO);
@@ -26,5 +26,5 @@ bool BackgroundLayer::init(){
 }
 
 float BackgroundLayer::getLandHeight() {
-    return Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("land"))->getContentSize().height;
+    return Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("land.png"))->getContentSize().height;
 }

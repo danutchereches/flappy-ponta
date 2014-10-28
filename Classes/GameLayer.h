@@ -5,7 +5,6 @@
 #include "OptionLayer.h"
 #include "BirdSprite.h"
 #include "BackgroundLayer.h"
-#include "AtlasLoader.h"
 #include "SimpleAudioEngine.h"
 #include <cstdlib>
 
@@ -179,4 +178,6 @@ private:
 	bool onContactBegin(const PhysicsContact& contact);
 
 	void gameOver();
+	
+	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 };

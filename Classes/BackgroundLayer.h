@@ -1,6 +1,5 @@
 #pragma once
 #include "cocos2d.h"
-#include "AtlasLoader.h"
 #include "time.h"
 using namespace cocos2d;
 using namespace std;

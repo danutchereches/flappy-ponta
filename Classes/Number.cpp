@@ -5,14 +5,14 @@ NumberSeries::NumberSeries(){}
 NumberSeries::~NumberSeries(){}
 
 bool NumberSeries::init() {
-    this->numberSeries = Vector<SpriteFrame*>(10);
-    return true;
+	this->numberSeries = Vector<SpriteFrame*>(10);
+	return true;
 }
 
 void NumberSeries::loadNumber(const char *fmt, int base) {
-    for (int i = base; i < 10 + base; i++){
+	for (int i = base; i < 10 + base; i++){
 		const char *filename = String::createWithFormat(fmt, i)->getCString();
-		auto frame = AtlasLoader::getInstance()->getSpriteFrameByName(filename);
+		auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(filename);
 		numberSeries.pushBack(frame);
 	}
 }

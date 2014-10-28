@@ -40,12 +40,12 @@ bool GameLayer::init(){
         this->addChild(this->groundNode);
         
         // init land
-        this->landSpite1 = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("land"));
+        this->landSpite1 = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("land.png"));
         this->landSpite1->setAnchorPoint(Point::ZERO);
         this->landSpite1->setPosition(Point::ZERO);
         this->addChild(this->landSpite1, 30);
         
-        this->landSpite2 = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("land"));
+        this->landSpite2 = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("land.png"));
         this->landSpite2->setAnchorPoint(Point::ZERO);
         this->landSpite2->setPosition(this->landSpite1->getContentSize().width-2.0f,0);
         this->addChild(this->landSpite2, 30);
@@ -58,6 +58,10 @@ bool GameLayer::init(){
 		auto contactListener = EventListenerPhysicsContact::create();
 		contactListener->onContactBegin = CC_CALLBACK_1(GameLayer::onContactBegin, this);
 		this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+		
+		auto listener = cocos2d::EventListenerKeyboard::create();
+		listener->onKeyReleased = CC_CALLBACK_2(GameLayer::onKeyReleased, this);
+		this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 		
 		return true;
 	}else {
@@ -122,8 +126,8 @@ void GameLayer::createPips() {
     // Create the pips
     for (int i = 0; i < PIP_COUNT; i++) {
         Size visibleSize = Director::getInstance()->getVisibleSize();
-        Sprite *pipUp = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("pipe_up"));
-        Sprite *pipDown = Sprite::createWithSpriteFrame(AtlasLoader::getInstance()->getSpriteFrameByName("pipe_down"));
+        Sprite *pipUp = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("pipe_up.png"));
+        Sprite *pipDown = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("pipe_down.png"));
         Node *singlePip = Node::create();
         
         // bind to pair
@@ -194,4 +198,16 @@ void GameLayer::birdSpriteFadeOut(){
 void GameLayer::birdSpriteRemove(){
 	this->bird->setRotation(0);
 	this->removeChild(this->bird);
+}
+
+void GameLayer::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event)
+{
+	cocos2d::log("button press %d", keyCode);
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_ESCAPE)
+	{
+	//	if (AppDelegate::pluginAnalytics != nullptr)
+	//		AppDelegate::pluginAnalytics->logEvent("click_back_btn");
+		
+	//	AppDelegate::closeApp();
+	}
 }

@@ -1,5 +1,5 @@
-﻿#pragma once
-#include "AtlasLoader.h"
+#pragma once
+
 #include "WelcomeLayer.h"
 #include "BackgroundLayer.h"
 #include "cocos2d.h"

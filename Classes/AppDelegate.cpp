@@ -4,13 +4,10 @@
 
 USING_NS_CC;
 
-const int AppDelegate::BASE_WIDTH = 120;
-const int AppDelegate::BASE_HEIGHT = 160;
-const float AppDelegate::SCALE_L_RES = 3.0;   //scale 0.250000
-const float AppDelegate::SCALE_M_RES = 4.0;   //scale 0.333333
-const float AppDelegate::SCALE_H_RES = 6.0;   //scale 0.500000
-const float AppDelegate::SCALE_XH_RES = 8.0;  //scale 0.666666
-const float AppDelegate::SCALE_XXH_RES = 12.0;//scale 1.000000
+const int AppDelegate::BASE_WIDTH = 384;
+const int AppDelegate::BASE_HEIGHT = 512;
+const float AppDelegate::SCALE_L_RES = 2.0;   //scale 0.500000
+const float AppDelegate::SCALE_H_RES = 1.0;   //scale 1.000000
 
 cocos2d::plugin::ProtocolAnalytics* AppDelegate::pluginAnalytics = nullptr;
 cocos2d::plugin::ProtocolGameServices* AppDelegate::pluginGameServices = nullptr;
@@ -32,50 +29,31 @@ bool AppDelegate::applicationDidFinishLaunching()
 	auto glview = director->getOpenGLView();
 	if (!glview)
 	{
-		glview = GLView::createWithRect("Celebrity Puzzle", cocos2d::Rect(0, 0,
-				405,
-			//	540,
-			//	450,
-				720), 1);
+		glview = GLView::createWithRect("Flappy Ponta", cocos2d::Rect(0, 0, 384, 512), 1);
 		director->setOpenGLView(glview);
 	}
 	
-//	glview->setDesignResolutionSize(AppDelegate::BASE_WIDTH, AppDelegate::BASE_HEIGHT, ResolutionPolicy::NO_BORDER);
-	glview->setDesignResolutionSize(288,512, ResolutionPolicy::SHOW_ALL);
+	glview->setDesignResolutionSize(AppDelegate::BASE_WIDTH, AppDelegate::BASE_HEIGHT, ResolutionPolicy::NO_BORDER);
 	cocos2d::Size frameSize = glview->getFrameSize();
 	
 	cocos2d::log("frame size %f, %f", frameSize.width, frameSize.height);
 	
 	std::vector<std::string> searchPath;
-	/*
-	if (frameSize.height >= 1775) {
-		this->resolutionScale = AppDelegate::SCALE_XXH_RES;
-		searchPath.push_back("gfx/xxh_res");
-	} else if (frameSize.height >= 1184) { //height - soft btns
-		this->resolutionScale = AppDelegate::SCALE_XH_RES;
-		searchPath.push_back("gfx/xh_res");
-	} else if (frameSize.height >= 960) {
+	if (frameSize.height >= 512) {
 		this->resolutionScale = AppDelegate::SCALE_H_RES;
 		searchPath.push_back("gfx/h_res");
-	} else if (frameSize.height >= 640) {
-		this->resolutionScale = AppDelegate::SCALE_M_RES;
-		searchPath.push_back("gfx/m_res");
 	} else {
 		this->resolutionScale = AppDelegate::SCALE_L_RES;
 		searchPath.push_back("gfx/l_res");
 	}
 	searchPath.push_back("gfx/all_res");
 	searchPath.push_back("sfx");
-	*/
-	searchPath.push_back("image");
-	searchPath.push_back("fonts");
-	searchPath.push_back("sounds");
 	
 	FileUtils::getInstance()->setSearchPaths(searchPath);
 	
-//	cocos2d::log("resolution scale %f, %f", resolutionScale, (AppDelegate::BASE_WIDTH * this->resolutionScale) / AppDelegate::BASE_WIDTH);
+	cocos2d::log("resolution scale %f, %f", resolutionScale, (AppDelegate::BASE_WIDTH * this->resolutionScale) / AppDelegate::BASE_WIDTH);
 	
-//	director->setContentScaleFactor(this->resolutionScale);
+	director->setContentScaleFactor(this->resolutionScale);
 	
 	// turn on display FPS
 	director->setDisplayStats(true);
@@ -86,7 +64,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	pluginAnalytics = dynamic_cast<cocos2d::plugin::ProtocolAnalytics*>
 			(cocos2d::plugin::PluginManager::getInstance()->loadPlugin("GoogleAnalytics"));
 	pluginAnalytics->setDebugMode(true);
-	pluginAnalytics->startSession("UA-55658211-1");
+	pluginAnalytics->startSession("UA-55456421-4");
 	pluginAnalytics->setCaptureUncaughtException(true);
 	pluginAnalytics->setSessionContinueMillis(300);
 	

@@ -57,7 +57,6 @@ GAME_SRC
   Classes/Helpers.cpp
   Classes/Objects.cpp
   Classes/Loader.cpp
-  Classes/AtlasLoader.cpp
   Classes/BackgroundLayer.cpp
   Classes/BirdSprite.cpp
   Classes/GameLayer.cpp
