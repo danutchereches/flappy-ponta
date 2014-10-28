@@ -1,7 +1,6 @@
 #include "cocos2d.h"
 #include "AtlasLoader.h"
 #include "SimpleAudioEngine.h"
-#include "HelloWorldScene.h"
 #include "WelcomeScene.h"
 #include "BackgroundLayer.h"
 

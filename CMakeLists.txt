@@ -62,7 +62,6 @@ GAME_SRC
   Classes/BirdSprite.cpp
   Classes/GameLayer.cpp
   Classes/GameScene.cpp
-  Classes/HelloWorldScene.cpp
   Classes/LoadingScene.cpp
   Classes/MenuScene.cpp
   Classes/Number.cpp
