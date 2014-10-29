@@ -82,15 +82,15 @@ bool GameLayer::onContactBegin(const PhysicsContact& contact)
 
 void GameLayer::scrollLand(float dt)
 {
-	this->landSpite1->setPositionX(this->landSpite1->getPositionX() - 0.5f);
-	this->landSpite2->setPositionX(this->landSpite1->getPositionX() + this->landSpite1->getContentSize().width - 0.5f);
-	if (this->landSpite2->getPositionX() == 0)
+	this->landSpite1->setPositionX(this->landSpite1->getPositionX() - 0.7f);
+	this->landSpite2->setPositionX(this->landSpite1->getPositionX() + this->landSpite1->getContentSize().width - 0.7f);
+	if (this->landSpite2->getPositionX() <= 0)
 		this->landSpite1->setPositionX(0);
 	
 	// move the pips
 	for (auto singlePip : this->pips)
 	{
-		singlePip->setPositionX(singlePip->getPositionX() - 0.5f);
+		singlePip->setPositionX(singlePip->getPositionX() - 0.7f);
 		if(singlePip->getPositionX() < -PIP_WIDTH)
 		{
 			singlePip->setTag(PIP_NEW);
@@ -116,7 +116,7 @@ void GameLayer::onTouch()
 	else if(this->gameStatus == GAME_STATUS_START)
 	{
 		if (this->bird->getPositionY() < Director::getInstance()->getVisibleSize().height - this->bird->getContentSize().height/2)
-			this->bird->getPhysicsBody()->setVelocity(Vect(0, 60));
+			this->bird->getPhysicsBody()->setVelocity(Vect(0, 70));
 	}
 }
 

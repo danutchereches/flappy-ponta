@@ -47,12 +47,12 @@ const float PIP_SHIFT_SPEED = 80.0f;
 /**
  * The distance between the down pip and up pip
  */
-const int PIP_DISTANCE = 35;
+const int PIP_DISTANCE = 40;
 
 /**
  * The distance between the pips vertical
  */
-const int PIP_INTERVAL = 45;
+const int PIP_INTERVAL = 80;
 
 /**
  * The number of pip pairs display in the screen in the same time
@@ -62,7 +62,7 @@ const int PIP_COUNT = 2;
 /**
  * The distance that the pip will display in the screen, for player to ready
  */
-const int WAIT_DISTANCE = 15;
+const int WAIT_DISTANCE = 40;
 
 /**
 * Define the game status
@@ -77,7 +77,8 @@ typedef enum _game_status {
 } GameStatus;
 
 
-class GameLayer : public Layer, public OptionDelegate{
+class GameLayer : public Layer, public OptionDelegate
+{
 public:
 	GameLayer();
 
