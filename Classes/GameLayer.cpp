@@ -190,9 +190,9 @@ void GameLayer::gameOver()
 	//get the best score
 	int bestScore = UserRecord::getInstance()->readIntegerFromUserDefault("best_score");
 	//update the best score
-	if(this->score > bestScore){
+	if(this->score > bestScore)
 		UserRecord::getInstance()->saveIntegerToUserDefault("best_score",this->score);
-	}
+	
 	this->delegator->onGameEnd(this->score, bestScore);
 	this->unschedule(shiftLand);
 	SimpleAudioEngine::getInstance()->playEffect("sfx_die.ogg");
@@ -204,16 +204,15 @@ void GameLayer::gameOver()
 
 void GameLayer::birdSpriteFadeOut()
 {
-	FadeOut* animation = FadeOut::create(1.5);
+	FadeOut* animation = FadeOut::create(1.5f);
 	CallFunc* animationDone = CallFunc::create(bind(&GameLayer::birdSpriteRemove,this));
-	Sequence* sequence = Sequence::createWithTwoActions(animation,animationDone);
+	Sequence* sequence = Sequence::create(animation,animationDone, NULL);
 	this->bird->stopAllActions();
 	this->bird->runAction(sequence);
 }
 
 void GameLayer::birdSpriteRemove()
 {
-	this->bird->setRotation(0);
 	this->removeChild(this->bird);
 }
 

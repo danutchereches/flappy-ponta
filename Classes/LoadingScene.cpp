@@ -4,16 +4,10 @@ LoadingScene::LoadingScene(){}
 
 LoadingScene::~LoadingScene(){}
 
-bool LoadingScene::init()
-{
-	if(Scene::init())
-		return true;
-	else
-		return false;
-}
-
 void LoadingScene::onEnter()
 {
+	cocos2d::Scene::onEnter();
+	
 	// add background to current scene
 //	Sprite *background = Sprite::create("splash.png");
 //	Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -21,24 +15,25 @@ void LoadingScene::onEnter()
 //	background->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2);
 //	this->addChild(background);
 	
-	// start ansyc method load the atlas.png
-	Director::getInstance()->getTextureCache()->addImageAsync("spritesheet.png", CC_CALLBACK_1(LoadingScene::loadingCallBack, this));
+//	cocos2d::LayerColor* bg = cocos2d::LayerColor::create(cocos2d::Color4B::WHITE);
+//	this->addChild(bg);
+//	
+//	auto logo = cocos2d::Sprite::create("logo.png");
+//	cocos2d::Size visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+//	cocos2d::Point origin = cocos2d::Director::getInstance()->getVisibleOrigin();
+//	logo->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2);
+//	this->addChild(logo);
+	
+	schedule(schedule_selector(LoadingScene::load), 0);
 }
 
-void LoadingScene::loadingCallBack(Texture2D *texture)
+void LoadingScene::load(float dt)
 {
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("spritesheet.plist", texture);
+	Loader::loadEverything();
 	
-	// After loading the texture , preload all the sound
-	SimpleAudioEngine::getInstance()->preloadEffect("sfx_die.ogg");
-	SimpleAudioEngine::getInstance()->preloadEffect("sfx_hit.ogg");
-	SimpleAudioEngine::getInstance()->preloadEffect("sfx_point.ogg");
-	SimpleAudioEngine::getInstance()->preloadEffect("sfx_swooshing.ogg");
-	SimpleAudioEngine::getInstance()->preloadEffect("sfx_wing.ogg");
+	unschedule(schedule_selector(LoadingScene::load));
 	
-	// After load all the things, change the scene to new one
-	//auto scene = HelloWorld::createScene();
 	auto scene = WelcomeScene::create();
-	TransitionScene *transition = TransitionFade::create(1, scene);
-	Director::getInstance()->replaceScene(transition);
+	cocos2d::TransitionScene* transition = cocos2d::TransitionFade::create(1, scene);
+	cocos2d::Director::getInstance()->replaceScene(transition);
 }

@@ -21,7 +21,11 @@ void Loader::loadEverything(const std::function<void()>& func)
 
 void Loader::loadSounds()
 {
-//	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sfx_die.ogg");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sfx_hit.ogg");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sfx_point.ogg");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sfx_swooshing.ogg");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sfx_wing.ogg");
 	
 //	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("mfx/");
 }
@@ -30,7 +34,7 @@ void Loader::loadTextures()
 {
 	mFrameCache = cocos2d::SpriteFrameCache::getInstance();
 	mFrameCache->retain();
-//	mFrameCache->addSpriteFramesWithFile("spritesheet.plist");
+	mFrameCache->addSpriteFramesWithFile("spritesheet.plist");
 }
 
 void Loader::loadAnimations()
