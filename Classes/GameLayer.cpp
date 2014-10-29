@@ -110,7 +110,8 @@ void GameLayer::onTouch()
 	}
 	else if(this->gameStatus == GAME_STATUS_START)
 	{
-		this->bird->getPhysicsBody()->setVelocity(Vect(0, 260));
+		if (this->bird->getPositionY() < Director::getInstance()->getVisibleSize().height - this->bird->getContentSize().height/2)
+			this->bird->getPhysicsBody()->setVelocity(Vect(0, 260));
 	}
 }
 
