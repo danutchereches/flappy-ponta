@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cocos2d.h"
-#include "GameLayer.h"
+#include "Objects.h"
 #include "GameScene.h"
 #include "Number.h"
 #include "SimpleAudioEngine.h"
@@ -15,7 +15,8 @@ const string NUMBER_SCORE = "number_score";
 const string NUMBER_FONT = "font";
 const int CURRENT_SCORE_SPRITE_TAG = 10001;
 
-class StatusLayer:public Layer,public StatusDelegate{
+class StatusLayer : public Layer, public StatusDelegate
+{
 public:
 	StatusLayer(void);
 
@@ -60,7 +61,7 @@ private:
 
 	void blinkAction();
 
-	void menuRestartCallback(Object *sender);
+	void menuRestartCallback(Ref *sender);
 
 	Sprite* scoreSprite;
 

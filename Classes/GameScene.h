@@ -14,8 +14,8 @@ public:
 	~GameScene();
 
 	bool virtual init();
-    
-    void restart();
+	
+	void restart();
 
 	CREATE_FUNC(GameScene);
 };

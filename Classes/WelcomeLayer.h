@@ -25,7 +25,7 @@ private:
 	/**
      * The start button has been pressed will call this function
      */
-	void menuStartCallback(Object *sender);
+	void menuStartCallback(Ref *sender);
     
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 	

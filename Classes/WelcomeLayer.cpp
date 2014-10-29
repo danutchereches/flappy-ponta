@@ -87,7 +87,7 @@ void WelcomeLayer::scrollLand(float dt){
 	}
 }
 
-void WelcomeLayer::menuStartCallback(Object *sender){
+void WelcomeLayer::menuStartCallback(Ref *sender){
 	SimpleAudioEngine::getInstance()->playEffect("sfx_swooshing.ogg");
 	this->removeChildByTag(BIRD_SPRITE_TAG);
 	auto scene = GameScene::create();

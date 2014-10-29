@@ -6,10 +6,11 @@ StatusLayer::StatusLayer(){};
 StatusLayer::~StatusLayer(){};
 
 
-bool StatusLayer::init(){
-	if(!Layer::init()){
+bool StatusLayer::init()
+{
+	if(!Layer::init())
 		return false;
-	}
+	
 	// init numbers
 	this->bestScore = 0;
 	this->currentScore = 0;
@@ -23,7 +24,8 @@ bool StatusLayer::init(){
 	return true;
 }
 
-void StatusLayer::showReadyStatus() {
+void StatusLayer::showReadyStatus()
+{
 	scoreSprite = (Sprite *)Number::getInstance()->convert(NUMBER_FONT.c_str(), 0);
 	scoreSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2,this->originPoint.y + this->visibleSize.height *5/6));
 	this->addChild(scoreSprite);
@@ -37,12 +39,14 @@ void StatusLayer::showReadyStatus() {
 	this->addChild(tutorialSprite);
 }
 
-void StatusLayer::showStartStatus() {
+void StatusLayer::showStartStatus()
+{
 	this->getreadySprite->runAction(FadeOut::create(0.4f));
 	this->tutorialSprite->runAction(FadeOut::create(0.4f));
 }
 
-void StatusLayer::showOverStatus(int curScore, int bestScore) {
+void StatusLayer::showOverStatus(int curScore, int bestScore)
+{
 	this->currentScore = curScore;
 	this->bestScore = bestScore;
 	if(curScore > bestScore){
@@ -55,22 +59,26 @@ void StatusLayer::showOverStatus(int curScore, int bestScore) {
 	this->blinkFullScreen();
 }
 
-void StatusLayer::onGameStart(){
+void StatusLayer::onGameStart()
+{
 	this->showStartStatus();
 }
 
-void StatusLayer::onGamePlaying(int score){
+void StatusLayer::onGamePlaying(int score)
+{
 	this->removeChild(scoreSprite);
 	this->scoreSprite = (Sprite* )Number::getInstance()->convert(NUMBER_FONT.c_str(), score);
 	scoreSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2,this->originPoint.y + this->visibleSize.height *5/6));
 	this->addChild(scoreSprite);
 }
 
-void StatusLayer::onGameEnd(int curScore, int bestScore){
+void StatusLayer::onGameEnd(int curScore, int bestScore)
+{
 	this->showOverStatus(curScore,bestScore);
 }
 
-void StatusLayer::loadWhiteSprite(){
+void StatusLayer::loadWhiteSprite()
+{
 	//this white sprite is used for blinking the screen for a short while
 	whiteSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("white.png"));
 	whiteSprite->setScale(100);
@@ -78,7 +86,8 @@ void StatusLayer::loadWhiteSprite(){
 	this->addChild(whiteSprite,10000);
 }
 
-void StatusLayer::blinkFullScreen(){
+void StatusLayer::blinkFullScreen()
+{
 	//display a flash blink
 	auto fadeOut = FadeOut::create(0.1f);
 	auto fadeIn = FadeIn::create(0.1f);
@@ -89,7 +98,8 @@ void StatusLayer::blinkFullScreen(){
 	whiteSprite->runAction(sequence);
 }
 
-void StatusLayer::fadeInGameOver(){	
+void StatusLayer::fadeInGameOver()
+{
 	// create the game over panel
 	Sprite* gameoverSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("text_game_over.png"));
 	gameoverSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2, this->originPoint.y + this->visibleSize.height *2/3));
@@ -145,7 +155,8 @@ void StatusLayer::jumpToScorePanel()
 	scorepanelSprite->runAction(sequence);
 }
 
-void StatusLayer::fadeInRestartBtn(){
+void StatusLayer::fadeInRestartBtn()
+{
 	Node * tmpNode = Node::create();
 	
 	//create the restart menu;
@@ -175,36 +186,40 @@ void StatusLayer::fadeInRestartBtn(){
 	tmpNode->runAction(sequence);
 }
 
-void StatusLayer::refreshScoreCallback(){
+void StatusLayer::refreshScoreCallback()
+{
 	this->tmpScore = 0;
 	schedule(schedule_selector(StatusLayer::refreshScoreExecutor),0.1f);
 }
 
-void StatusLayer::refreshScoreExecutor(float dt){
-	if(this->getChildByTag(CURRENT_SCORE_SPRITE_TAG)){
+void StatusLayer::refreshScoreExecutor(float dt)
+{
+	if(this->getChildByTag(CURRENT_SCORE_SPRITE_TAG))
 		this->removeChildByTag(CURRENT_SCORE_SPRITE_TAG);
-	}
+	
 	scoreSprite = (Sprite *)Number::getInstance()->convert(NUMBER_SCORE.c_str(), this->tmpScore, Gravity::GRAVITY_RIGHT);
 	scoreSprite->setAnchorPoint(Point(1,0));
 	scoreSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width * 0.86f, this->originPoint.y + this->visibleSize.height *  1 / 2));
 	scoreSprite->setTag(CURRENT_SCORE_SPRITE_TAG);
 	this->addChild(scoreSprite,1000);
 	this->tmpScore++;
-	if(this->tmpScore > this->currentScore){
+	if(this->tmpScore > this->currentScore)
 		unschedule(schedule_selector(StatusLayer::refreshScoreExecutor));
-	}
 }
 
-void StatusLayer::setBlinkSprite() {
+void StatusLayer::setBlinkSprite()
+{
 	this->blink = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("blink_00.png"));
 	Animation *animation = Animation::create();
 	animation->setDelayPerUnit(0.1f);
-	for (int i = 0; i < 3; i++){
+	for (int i = 0; i < 3; i++)
+	{
 		const char *filename = String::createWithFormat("blink_%02d.png", i)->getCString();
 		SpriteFrame *frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(filename);
 		animation->addSpriteFrame(frame);
 	}
-	for (int i = 2; i >= 0; i--){
+	for (int i = 2; i >= 0; i--)
+	{
 		const char *filename = String::createWithFormat("blink_%02d.png", i)->getCString();
 		SpriteFrame *frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(filename);
 		animation->addSpriteFrame(frame);
@@ -215,14 +230,17 @@ void StatusLayer::setBlinkSprite() {
 	blink->runAction(RepeatForever::create(sequence));
 }
 
-void StatusLayer::blinkAction() {
-	if(this->blink && this->blink->getParent()) {
+void StatusLayer::blinkAction()
+{
+	if(this->blink && this->blink->getParent())
+	{
 		Size activeSize = this->blink->getParent()->getContentSize();
 		this->blink->setPosition(rand()%((int)(activeSize.width)), rand()%((int)(activeSize.height)));
 	}
 }
 
-string StatusLayer::getMedalsName(int score){
+string StatusLayer::getMedalsName(int score)
+{
 	this->setBlinkSprite();
 
 	//display the golden silver or bronze iron
@@ -239,7 +257,8 @@ string StatusLayer::getMedalsName(int score){
 	return medalsName;
 }
 
-void StatusLayer::menuRestartCallback(Object* pSender){
+void StatusLayer::menuRestartCallback(Ref* pSender)
+{
 	SimpleAudioEngine::getInstance()->playEffect("sfx_swooshing.ogg");
 	auto scene = GameScene::create();
 	TransitionScene *transition = TransitionFade::create(1, scene);

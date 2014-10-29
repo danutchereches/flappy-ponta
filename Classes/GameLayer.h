@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cocos2d.h"
+#include "AppDelegate.h"
 #include "UserRecord.h"
 #include "OptionLayer.h"
 #include "BirdSprite.h"
@@ -75,23 +76,6 @@ typedef enum _game_status {
 	GAME_STATUS_OVER
 } GameStatus;
 
-class StatusDelegate {
-public:
-	/**
-	* When the game start, this method will be called
-	*/
-	virtual void onGameStart(void) = 0;
-
-	/**
-	* During paying, after the score changed, this method will be called
-	*/
-	virtual void onGamePlaying(int score) = 0;
-
-	/**
-	* When game is over, this method will be called
-	*/
-	virtual void onGameEnd(int curSocre, int bestScore) = 0;
-};
 
 class GameLayer : public Layer , public OptionDelegate{
 public:
