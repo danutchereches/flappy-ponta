@@ -41,6 +41,7 @@ bool GameLayer::init()
 	groundBody->setContactTestBitmask(0xFFFFFFFF);
 	this->groundNode->setPhysicsBody(groundBody);
 	this->groundNode->setPosition(144, landHeight/2);
+	this->groundNode->setTag(GROUND_TAG);
 	this->addChild(this->groundNode);
 	
 	// init land
@@ -76,7 +77,20 @@ bool GameLayer::onContactBegin(const PhysicsContact& contact)
 			contact.getShapeA()->getBody()->getNode()->getTag(),
 			contact.getShapeB()->getBody()->getNode()->getTag()
 	);
-	this->gameOver();
+	
+	if (this->gameStatus == GAME_STATUS_START)
+	{
+		if (contact.getShapeA()->getBody()->getNode()->getTag() == GROUND_TAG
+		 || contact.getShapeB()->getBody()->getNode()->getTag() == GROUND_TAG)
+		{
+			this->bird->getPhysicsBody()->setVelocity(Vect(0, 40));
+		}
+		else
+		{
+			this->gameOver();
+		}
+	}
+	
 	return true;
 }
 
@@ -190,7 +204,7 @@ void GameLayer::checkHit()
 
 void GameLayer::gameOver()
 {
-	if(this->gameStatus == GAME_STATUS_OVER)
+	if (this->gameStatus == GAME_STATUS_OVER)
 		return;
 	
 	SimpleAudioEngine::getInstance()->playEffect("sfx_hit.ogg");

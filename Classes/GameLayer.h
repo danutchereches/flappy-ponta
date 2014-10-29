@@ -24,6 +24,8 @@ const int PIP_PASS = 30;
 
 const int PIP_NEW = 31;
 
+const int GROUND_TAG = 90;
+
 /**
  * The radius of the bird
  */
