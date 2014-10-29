@@ -89,8 +89,8 @@ void GameLayer::scrollLand(float dt)
 		if(singlePip->getPositionX() < -PIP_WIDTH)
 		{
 			singlePip->setTag(PIP_NEW);
-			Size visibleSize = Director::getInstance()->getVisibleSize();
-			singlePip->setPositionX(visibleSize.width);
+			Size screenSize = Director::getInstance()->getWinSize();
+			singlePip->setPositionX(screenSize.width);
 			singlePip->setPositionY(this->getRandomHeight());
 		}
 	}
@@ -135,7 +135,7 @@ void GameLayer::createPips()
 	// Create the pips
 	for (int i = 0; i < PIP_COUNT; i++)
 	{
-		Size visibleSize = Director::getInstance()->getVisibleSize();
+		Size screenSize = Director::getInstance()->getWinSize();
 		Sprite *pipUp = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("pipe_up.png"));
 		Sprite *pipDown = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("pipe_down.png"));
 		Node *singlePip = Node::create();
@@ -144,7 +144,7 @@ void GameLayer::createPips()
 		pipDown->setPosition(0, PIP_HEIGHT + PIP_DISTANCE);
 		singlePip->addChild(pipDown, 0, DOWN_PIP);
 		singlePip->addChild(pipUp, 0, UP_PIP);
-		singlePip->setPosition(visibleSize.width + i*PIP_INTERVAL + WAIT_DISTANCE, this->getRandomHeight());
+		singlePip->setPosition(screenSize.width + i*PIP_INTERVAL + WAIT_DISTANCE, this->getRandomHeight());
 		auto body = PhysicsBody::create();
 		auto shapeBoxDown = PhysicsShapeBox::create(pipDown->getContentSize(),PHYSICSSHAPE_MATERIAL_DEFAULT, Point(0, PIP_HEIGHT + PIP_DISTANCE));
 		body->addShape(shapeBoxDown);

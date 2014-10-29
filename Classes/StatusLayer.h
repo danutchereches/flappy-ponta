@@ -82,4 +82,6 @@ private:
 	Point originPoint;
 
 	Size visibleSize;
+	
+	Size screeenSize;
 };

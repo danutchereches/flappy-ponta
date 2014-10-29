@@ -19,6 +19,7 @@ bool StatusLayer::init()
 	Number::getInstance()->loadNumber(NUMBER_SCORE.c_str(), "number_score_%02d.png");
 	this->visibleSize = Director::getInstance()->getVisibleSize();
 	this->originPoint = Director::getInstance()->getVisibleOrigin();
+	this->screeenSize = Director::getInstance()->getWinSize();
 	this->showReadyStatus();
 	this->loadWhiteSprite();
 	return true;
@@ -199,7 +200,7 @@ void StatusLayer::refreshScoreExecutor(float dt)
 	
 	scoreSprite = (Sprite *)Number::getInstance()->convert(NUMBER_SCORE.c_str(), this->tmpScore, Gravity::GRAVITY_RIGHT);
 	scoreSprite->setAnchorPoint(Point(1,0));
-	scoreSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width * 0.86f, this->originPoint.y + this->visibleSize.height *  1 / 2));
+	scoreSprite->setPosition(Point(this->screeenSize.width * 0.74f, this->originPoint.y + this->visibleSize.height *  1 / 2));
 	scoreSprite->setTag(CURRENT_SCORE_SPRITE_TAG);
 	this->addChild(scoreSprite,1000);
 	this->tmpScore++;
