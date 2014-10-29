@@ -25,6 +25,7 @@ bool GameLayer::init()
 	body->setLinearDamping(0.0f);
 	body->setGravityEnable(false);
 	body->setContactTestBitmask(0xFFFFFFFF);
+	body->setPositionOffset(cocos2d::Vec2(2.5f, 0));
 	this->bird->setPhysicsBody(body);
 	this->bird->setPosition(origin.x + visiableSize.width*1/3 - 5,origin.y + visiableSize.height/2 + 5);
 	this->bird->idle();
@@ -43,12 +44,12 @@ bool GameLayer::init()
 	this->addChild(this->groundNode);
 	
 	// init land
-	this->landSpite1 = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("land.png"));
+	this->landSpite1 = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("land.jpg"));
 	this->landSpite1->setAnchorPoint(Point::ZERO);
 	this->landSpite1->setPosition(Point::ZERO);
 	this->addChild(this->landSpite1, 30);
 	
-	this->landSpite2 = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("land.png"));
+	this->landSpite2 = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("land.jpg"));
 	this->landSpite2->setAnchorPoint(Point::ZERO);
 	this->landSpite2->setPosition(this->landSpite1->getContentSize().width-2.0f,0);
 	this->addChild(this->landSpite2, 30);
@@ -57,7 +58,7 @@ bool GameLayer::init()
 	this->schedule(shiftLand, 0.01f);
 	
 	this->scheduleUpdate();
-
+	
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(GameLayer::onContactBegin, this);
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
@@ -71,21 +72,25 @@ bool GameLayer::init()
 
 bool GameLayer::onContactBegin(const PhysicsContact& contact)
 {
+	cocos2d::log("contact tag %d - %d",
+			contact.getShapeA()->getBody()->getNode()->getTag(),
+			contact.getShapeB()->getBody()->getNode()->getTag()
+	);
 	this->gameOver();
 	return true;
 }
 
 void GameLayer::scrollLand(float dt)
 {
-	this->landSpite1->setPositionX(this->landSpite1->getPositionX() - 2.0f);
-	this->landSpite2->setPositionX(this->landSpite1->getPositionX() + this->landSpite1->getContentSize().width - 2.0f);
-	if(this->landSpite2->getPositionX() == 0)
+	this->landSpite1->setPositionX(this->landSpite1->getPositionX() - 0.5f);
+	this->landSpite2->setPositionX(this->landSpite1->getPositionX() + this->landSpite1->getContentSize().width - 0.5f);
+	if (this->landSpite2->getPositionX() == 0)
 		this->landSpite1->setPositionX(0);
 	
 	// move the pips
 	for (auto singlePip : this->pips)
 	{
-		singlePip->setPositionX(singlePip->getPositionX() - 2);
+		singlePip->setPositionX(singlePip->getPositionX() - 0.5f);
 		if(singlePip->getPositionX() < -PIP_WIDTH)
 		{
 			singlePip->setTag(PIP_NEW);
@@ -111,22 +116,22 @@ void GameLayer::onTouch()
 	else if(this->gameStatus == GAME_STATUS_START)
 	{
 		if (this->bird->getPositionY() < Director::getInstance()->getVisibleSize().height - this->bird->getContentSize().height/2)
-			this->bird->getPhysicsBody()->setVelocity(Vect(0, 260));
+			this->bird->getPhysicsBody()->setVelocity(Vect(0, 60));
 	}
 }
 
-void GameLayer::rotateBird() {
+void GameLayer::rotateBird()
+{
 	float verticalSpeed = this->bird->getPhysicsBody()->getVelocity().y;
-	this->bird->setRotation(min(max(-90, (verticalSpeed*0.2 + 60)), 30));
+	this->bird->setRotation(min(120, max(-90, verticalSpeed*(-0.4f) + 60)));
 }
-
 
 void GameLayer::update(float delta)
 {
 	if (this->gameStatus == GAME_STATUS_START)
 	{
 		this->rotateBird();
-		this->checkHit();
+	//	this->checkHit();
 	}
 }
 
@@ -136,8 +141,9 @@ void GameLayer::createPips()
 	for (int i = 0; i < PIP_COUNT; i++)
 	{
 		Size screenSize = Director::getInstance()->getWinSize();
-		Sprite *pipUp = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("pipe_up.png"));
-		Sprite *pipDown = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("pipe_down.png"));
+		Sprite *pipUp = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("tub.png"));
+		pipUp->setScaleY(-1);
+		Sprite *pipDown = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("tub.png"));
 		Node *singlePip = Node::create();
 		
 		// bind to pair
@@ -198,7 +204,7 @@ void GameLayer::gameOver()
 	this->unschedule(shiftLand);
 	SimpleAudioEngine::getInstance()->playEffect("sfx_die.ogg");
 	this->bird->die();
-	this->bird->setRotation(-90);
+	this->bird->setRotation(120);
 	this->birdSpriteFadeOut();
 	this->gameStatus = GAME_STATUS_OVER;
 }

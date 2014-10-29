@@ -4,7 +4,7 @@
 using namespace cocos2d;
 
 typedef enum{
-    ACTION_STATE_IDLE,
+	ACTION_STATE_IDLE,
 	ACTION_STATE_FLY,
 	ACTION_STATE_DIE
 } ActionState;
@@ -58,13 +58,7 @@ protected:
 	/**
 	* This method can create a frame animation with the likey name texture.
 	*/
-    static cocos2d::Animation *createAnimation(const char *fmt, int count, float fps);
-
-	/**
-	 * Since this game has three different types of bird
-	 * this method is just used for choosing which type of bird by random
-	 */
-    void createBirdByRandom();
+	static cocos2d::Animation *createAnimation(const char *fmt, int count, float fps);
 
 private:
 	static BirdSprite* shareBirdSprite;

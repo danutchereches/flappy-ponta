@@ -1,30 +1,28 @@
 #include "BackgroundLayer.h"
-BackgroundLayer::BackgroundLayer(){};
-BackgroundLayer::~BackgroundLayer(){};
 
-bool BackgroundLayer::init(){
-	if(!Layer::init()){
+bool BackgroundLayer::init()
+{
+	if (!LayerColor::initWithColor(cocos2d::Color4B(133, 185, 209, 255)))
 		return false;
-	}
-	//get the current time, the background image will selected by current time day or night: bg_day or bg_night
-	time_t t = time(NULL);
-	tm* lt = localtime(&t);
-	int hour = lt->tm_hour;
-	//create the background image according to the current time;
-	Sprite *background;
-	if(hour >= 6 && hour <= 17){
-		 background = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("bg_day.png"));
-	}else{
-		background = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("bg_night.png"));
-	}
-	background->setAnchorPoint(Point::ZERO);
-	background->setPosition(Point::ZERO);
+	
+	Size screenSize = Director::getInstance()->getWinSize();
+	
+	LayerColor* background = LayerColor::create(Color4B(193, 193, 193, 255));
+	background->ignoreAnchorPointForPosition(false);
+	background->setContentSize(Size(screenSize.width, screenSize.height*0.5f));
+	background->setAnchorPoint(cocos2d::Vec2(0, 0));
+	background->setPosition(Vec2::ZERO);
 	this->addChild(background);
-
+	
+	auto bgS = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("background.jpg"));
+	bgS->setPosition(cocos2d::Vec2(screenSize.width/2, background->getContentSize().height));
+	bgS->setAnchorPoint(cocos2d::Vec2(0.5f, 1));
+	background->addChild(bgS);
 	
 	return true;
 }
 
-float BackgroundLayer::getLandHeight() {
-    return Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("land.png"))->getContentSize().height;
+float BackgroundLayer::getLandHeight()
+{
+	return Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("land.jpg"))->getContentSize().height;
 }

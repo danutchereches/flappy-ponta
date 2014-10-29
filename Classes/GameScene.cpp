@@ -9,8 +9,8 @@ bool GameScene::init()
 	if (!Scene::initWithPhysics())
 		return false;
 	
-	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-	this->getPhysicsWorld()->setGravity(Vect(0, -900));
+//	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	this->getPhysicsWorld()->setGravity(Vect(0, -210));
 	
 	// Add the background
 	auto backgroundLayer = BackgroundLayer::create();

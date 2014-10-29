@@ -36,6 +36,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.view.View;
 
 public class AppActivity extends Cocos2dxActivity {
 	
@@ -52,6 +53,8 @@ public class AppActivity extends Cocos2dxActivity {
 		PluginWrapper.init(this);
 		PluginWrapper.setGLSurfaceView(view);
 		
+		hideSystemUI();
+		
 		return view;
 	}
 	
@@ -61,6 +64,29 @@ public class AppActivity extends Cocos2dxActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		PluginWrapper.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		
+		if (hasFocus) {
+			hideSystemUI();
+		}
+	}
+	
+	@SuppressLint("NewApi")
+	public void hideSystemUI()
+	{
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+			getWindow().getDecorView().setSystemUiVisibility(
+					View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+					| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+					| View.SYSTEM_UI_FLAG_FULLSCREEN
+					| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		}
 	}
 	
 	@Override

@@ -22,21 +22,19 @@ BirdSprite* BirdSprite::getInstance()
 
 bool BirdSprite::init()
 {
-	Sprite::init();
+	Sprite::initWithSpriteFrameName("ponta0.png");
 	this->isFirstTime = 3;
 	return true;
 }
 
 bool BirdSprite::createBird()
 {
-	this->createBirdByRandom();
-	this->setSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName(this->birdName));
 	// init idle status
 	this->setOpacity(255);
 	this->setVisible(true);
 	this->setRotation(0);
 	//create the bird animation
-	Animation* animation = this->createAnimation(this->birdNameFormat.c_str(), 3, 10);
+	Animation* animation = this->createAnimation("ponta%d.png", 3, 10);
 	Animate* animate = Animate::create(animation);
 	this->idleAction = RepeatForever::create(animate);
 	
@@ -90,38 +88,4 @@ bool BirdSprite::changeState(ActionState state)
 	//this->stopAllActions();
 	currentStatus = state;
 	return true;
-}
-
-void BirdSprite::createBirdByRandom()
-{
-	if(this->isFirstTime & 1)
-	{
-		this->isFirstTime &= 2;
-	}
-	else if(this->isFirstTime & 2)
-	{
-		this->isFirstTime &= 1;
-		return ;
-	}
-	srand((unsigned)time(NULL));
-	int type = ((int)rand())% 3;
-	switch (type)
-	{
-	case 0:
-		this->birdName = "bird0_0.png";
-		this->birdNameFormat = "bird0_%d.png";
-		break;
-	case 1:
-		this->birdName = "bird1_0.png";
-		this->birdNameFormat = "bird1_%d.png";
-		break;
-	case 2:
-		this->birdName = "bird2_0.png";
-		this->birdNameFormat = "bird2_%d.png";
-		break;
-	default:
-		this->birdName = "bird2_0.png";
-		this->birdNameFormat = "bird2_%d.png";
-		break;
-	}
 }

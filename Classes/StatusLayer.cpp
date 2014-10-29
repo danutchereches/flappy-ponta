@@ -82,7 +82,7 @@ void StatusLayer::loadWhiteSprite()
 {
 	//this white sprite is used for blinking the screen for a short while
 	whiteSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("white.png"));
-	whiteSprite->setScale(100);
+	whiteSprite->setScale(150);
 	whiteSprite->setOpacity(0);
 	this->addChild(whiteSprite,10000);
 }
@@ -163,7 +163,7 @@ void StatusLayer::fadeInRestartBtn()
 	//create the restart menu;
 	Sprite* restartBtn = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_play.png"));
 	Sprite* restartBtnActive = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_play.png"));
-	restartBtnActive->setPositionY(-4);
+	restartBtnActive->setPositionY(-1);
 	auto  menuItem = MenuItemSprite::create(restartBtn,restartBtnActive,NULL,CC_CALLBACK_1(StatusLayer::menuRestartCallback,this));
 	auto menu = Menu::create(menuItem,NULL);
 	menu->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2 - restartBtn->getContentSize().width / 2, this->originPoint.y + this->visibleSize.height * 2 / 7 - 10.0f));

@@ -4,10 +4,13 @@
 
 USING_NS_CC;
 
-const int AppDelegate::BASE_WIDTH = 384;
-const int AppDelegate::BASE_HEIGHT = 512;
-const float AppDelegate::SCALE_L_RES = 2.0;   //scale 0.500000
-const float AppDelegate::SCALE_H_RES = 1.0;   //scale 1.000000
+const int AppDelegate::BASE_WIDTH = 120;
+const int AppDelegate::BASE_HEIGHT = 160;
+const float AppDelegate::SCALE_L_RES = 3.0;   //scale 0.250000
+const float AppDelegate::SCALE_M_RES = 4.0;   //scale 0.333333
+const float AppDelegate::SCALE_H_RES = 6.0;   //scale 0.500000
+const float AppDelegate::SCALE_XH_RES = 8.0;  //scale 0.666666
+const float AppDelegate::SCALE_XXH_RES = 12.0;//scale 1.000000
 
 cocos2d::plugin::ProtocolAnalytics* AppDelegate::pluginAnalytics = nullptr;
 cocos2d::plugin::ProtocolGameServices* AppDelegate::pluginGameServices = nullptr;
@@ -29,7 +32,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	auto glview = director->getOpenGLView();
 	if (!glview)
 	{
-		glview = GLView::createWithRect("Flappy Ponta", cocos2d::Rect(0, 0, 384, 512), 1);
+		glview = GLView::createWithRect("Flappy Ponta", cocos2d::Rect(0, 0, 480, 640), 1);
 		director->setOpenGLView(glview);
 	}
 	
@@ -39,9 +42,18 @@ bool AppDelegate::applicationDidFinishLaunching()
 	cocos2d::log("frame size %f, %f", frameSize.width, frameSize.height);
 	
 	std::vector<std::string> searchPath;
-	if (frameSize.height >= 512) {
+	if (frameSize.height >= 1920) {
+		this->resolutionScale = AppDelegate::SCALE_XXH_RES;
+		searchPath.push_back("gfx/xxh_res");
+	} else if (frameSize.height >= 1280) {
+		this->resolutionScale = AppDelegate::SCALE_XH_RES;
+		searchPath.push_back("gfx/xh_res");
+	} else if (frameSize.height >= 960) {
 		this->resolutionScale = AppDelegate::SCALE_H_RES;
 		searchPath.push_back("gfx/h_res");
+	} else if (frameSize.height >= 640) {
+		this->resolutionScale = AppDelegate::SCALE_M_RES;
+		searchPath.push_back("gfx/m_res");
 	} else {
 		this->resolutionScale = AppDelegate::SCALE_L_RES;
 		searchPath.push_back("gfx/l_res");

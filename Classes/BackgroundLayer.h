@@ -4,15 +4,12 @@
 using namespace cocos2d;
 using namespace std;
 
-class BackgroundLayer:public Layer{
+class BackgroundLayer:public LayerColor
+{
 public:
-	BackgroundLayer(void);
-    
-	~BackgroundLayer(void);
-    
-	virtual bool init();
-    
+	virtual bool init() override;
+	
 	CREATE_FUNC(BackgroundLayer);
-    
-    static float getLandHeight();
+	
+	static float getLandHeight();
 };

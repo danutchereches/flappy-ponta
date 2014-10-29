@@ -13,14 +13,12 @@ using namespace CocosDenshion;
 
 const int START_BUTTON_TAG = 100;
 
-class WelcomeLayer : public Layer{
+class WelcomeLayer : public LayerColor
+{
 public:
-	WelcomeLayer(void);
-	~WelcomeLayer(void);
-	virtual bool init();
+	virtual bool init() override;
 	// implement the "static create()" method manually
 	CREATE_FUNC(WelcomeLayer);
-    
 private:
 	/**
      * The start button has been pressed will call this function
