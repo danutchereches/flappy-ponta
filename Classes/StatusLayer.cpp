@@ -163,16 +163,15 @@ void StatusLayer::fadeInRestartBtn()
 	//create the restart menu;
 	Sprite* restartBtn = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_play.png"));
 	Sprite* restartBtnActive = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_play.png"));
-	restartBtnActive->setPositionY(-1);
+	restartBtnActive->setPositionY(-0.5f);
 	auto  menuItem = MenuItemSprite::create(restartBtn,restartBtnActive,NULL,CC_CALLBACK_1(StatusLayer::menuRestartCallback,this));
-	auto menu = Menu::create(menuItem,NULL);
-	menu->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2 - restartBtn->getContentSize().width / 2, this->originPoint.y + this->visibleSize.height * 2 / 7 - 10.0f));
+	auto menu = Menu::create(menuItem, NULL);
+	menu->setPosition(Point(this->originPoint.x + this->visibleSize.width * 0.35f, this->originPoint.y + this->visibleSize.height * 0.26f));
 	tmpNode->addChild(menu);
-	
 	
 	//create the rate button. however ,this button is not available yet = =
 	Sprite* rateBtn = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_score.png"));
-	rateBtn->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2 + rateBtn->getContentSize().width / 2, this->originPoint.y + this->visibleSize.height * 2 / 7 - 10.0f));
+	rateBtn->setPosition(Point(this->originPoint.x + this->visibleSize.width * 0.65f, this->originPoint.y + this->visibleSize.height * 0.26f));
 	tmpNode->addChild(rateBtn);
 	this->addChild(tmpNode);
 	

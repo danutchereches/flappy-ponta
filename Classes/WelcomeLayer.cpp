@@ -29,9 +29,9 @@ bool WelcomeLayer::init()
 	//add the start-menu to the current scene
 	Sprite *startButton = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_play.png"));
 	Sprite *activeStartButton = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_play.png"));
-	activeStartButton->setPositionY(1);
+	activeStartButton->setPositionY(-0.5f);
 	auto menuItem  = MenuItemSprite::create(startButton,activeStartButton,NULL,CC_CALLBACK_1(WelcomeLayer::menuStartCallback, this));
-	menuItem->setPosition(Point(visibleSize.width/2 ,visibleSize.height*2/5));
+	menuItem->setPosition(Point(visibleSize.width/2 ,visibleSize.height*0.26f));
 	
 	auto menu = Menu::create(menuItem,NULL);
 	menu->setPosition(Point(origin.x ,origin.y));
