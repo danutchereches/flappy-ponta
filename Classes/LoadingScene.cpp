@@ -24,6 +24,9 @@ void LoadingScene::onEnter()
 //	logo->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2);
 //	this->addChild(logo);
 	
+	if (AppDelegate::pluginAnalytics != nullptr)
+		AppDelegate::pluginAnalytics->callFuncWithParam("logPageView", new cocos2d::plugin::PluginParam("loading_scene"), nullptr);
+	
 	schedule(schedule_selector(LoadingScene::load), 0);
 }
 

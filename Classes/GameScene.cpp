@@ -41,6 +41,10 @@ bool GameScene::init()
 		optionLayer->setDelegator(gameLayer);
 		this->addChild(optionLayer);
 	}
+	
+	if (AppDelegate::pluginAnalytics != nullptr)
+		AppDelegate::pluginAnalytics->callFuncWithParam("logPageView", new cocos2d::plugin::PluginParam("game_scene"), nullptr);
+	
 	return true;
 }
 

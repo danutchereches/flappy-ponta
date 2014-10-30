@@ -17,5 +17,9 @@ bool WelcomeScene::init()
 		bRet = true;
 	}
 	while(0);
+	
+	if (AppDelegate::pluginAnalytics != nullptr)
+		AppDelegate::pluginAnalytics->callFuncWithParam("logPageView", new cocos2d::plugin::PluginParam("welcome_scene"), nullptr);
+	
 	return bRet;
 }

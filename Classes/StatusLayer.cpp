@@ -58,6 +58,9 @@ void StatusLayer::showOverStatus(int curScore, int bestScore)
 	}
 	this->removeChild(scoreSprite);
 	this->blinkFullScreen();
+	
+	if (AppDelegate::pluginAnalytics != nullptr)
+		AppDelegate::pluginAnalytics->callFuncWithParam("logPageView", new cocos2d::plugin::PluginParam("game_over_scene"), nullptr);
 }
 
 void StatusLayer::onGameStart()
@@ -259,6 +262,9 @@ string StatusLayer::getMedalsName(int score)
 
 void StatusLayer::menuRestartCallback(Ref* pSender)
 {
+	if (AppDelegate::pluginAnalytics != nullptr)
+		AppDelegate::pluginAnalytics->logEvent("click_restart");
+	
 	SimpleAudioEngine::getInstance()->playEffect("sfx_swooshing.ogg");
 	auto scene = GameScene::create();
 	TransitionScene *transition = TransitionFade::create(1, scene);

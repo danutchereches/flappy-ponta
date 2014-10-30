@@ -76,6 +76,9 @@ void WelcomeLayer::scrollLand(float dt)
 
 void WelcomeLayer::menuStartCallback(Ref *sender)
 {
+	if (AppDelegate::pluginAnalytics != nullptr)
+		AppDelegate::pluginAnalytics->logEvent("click_start");
+	
 	SimpleAudioEngine::getInstance()->playEffect("sfx_swooshing.ogg");
 	this->removeChildByTag(BIRD_SPRITE_TAG);
 	auto scene = GameScene::create();
