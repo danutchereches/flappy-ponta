@@ -170,14 +170,14 @@
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="celebrity-puzzle.null.31159645" name="celebrity-puzzle"/>
+		<project id="flappy-ponta.null.31159645" name="flappy-ponta"/>
 	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Default">
-			<resource resourceType="PROJECT" workspacePath="/celebrity-puzzle"/>
+			<resource resourceType="PROJECT" workspacePath="/flappy-ponta"/>
 		</configuration>
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/celebrity-puzzle"/>
+			<resource resourceType="PROJECT" workspacePath="/flappy-ponta"/>
 		</configuration>
 	</storageModule>
 </cproject>
