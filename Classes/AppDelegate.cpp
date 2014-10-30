@@ -68,14 +68,14 @@ bool AppDelegate::applicationDidFinishLaunching()
 	director->setContentScaleFactor(this->resolutionScale);
 	
 	// turn on display FPS
-	director->setDisplayStats(true);
+	director->setDisplayStats(false);
 	
 	// set FPS. the default value is 1.0/60 if you don't call this
 	director->setAnimationInterval(1.0 / 60);
 	
 	pluginAnalytics = dynamic_cast<cocos2d::plugin::ProtocolAnalytics*>
 			(cocos2d::plugin::PluginManager::getInstance()->loadPlugin("GoogleAnalytics"));
-	pluginAnalytics->setDebugMode(true);
+	pluginAnalytics->setDebugMode(false);
 	pluginAnalytics->startSession("UA-55456421-4");
 	pluginAnalytics->setCaptureUncaughtException(true);
 	pluginAnalytics->setSessionContinueMillis(300);
@@ -87,7 +87,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #endif
 	pluginGameServices = dynamic_cast<cocos2d::plugin::ProtocolGameServices*>
 			(cocos2d::plugin::PluginManager::getInstance()->loadPlugin(pluginName));
-	pluginGameServices->setDebugMode(true);
+	pluginGameServices->setDebugMode(false);
 	pluginGameServices->startSession();
 	
 	auto scene = LoadingScene::create();
