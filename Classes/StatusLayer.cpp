@@ -69,7 +69,7 @@ void StatusLayer::onGameStart()
 
 void StatusLayer::onGamePlaying(int score)
 {
-	this->scoreSprite->setString(__String::createWithFormat("%d", score)->_string);
+	this->scoreSprite->setString(__String::createWithFormat("%d", -score)->_string);
 }
 
 void StatusLayer::onGameEnd(int curScore, int bestScore)
@@ -102,7 +102,7 @@ void StatusLayer::fadeInGameOver()
 {
 	// create the game over panel
 	Sprite* gameoverSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("text_game_over.png"));
-	gameoverSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2, this->originPoint.y + this->visibleSize.height *2/3));
+	gameoverSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2, this->originPoint.y + this->visibleSize.height * 0.8f));
 	this->addChild(gameoverSprite);
 	auto gameoverFadeIn = FadeIn::create(0.5f);
 	
@@ -119,34 +119,21 @@ void StatusLayer::jumpToScorePanel()
 	Sprite* scorepanelSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("score_panel.png"));
 	scorepanelSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2, this->originPoint.y - scorepanelSprite->getContentSize().height));
 	this->addChild(scorepanelSprite);
-		
+	
+	//display the  score on the score panel
+	auto scoreSprite = cocos2d::Label::createWithTTF(__String::createWithFormat("%d", -this->currentScore)->_string, "fonts/robo.ttf", 8);
+	scoreSprite->setColor(Color3B(176, 19, 19));
+	scoreSprite->setPosition(scorepanelSprite->getContentSize().width/2, scorepanelSprite->getContentSize().height * 0.56f);
+	scorepanelSprite->addChild(scoreSprite);
+	
 	//display the  best score on the score panel
-	auto bestScoreSprite = cocos2d::Label::createWithTTF(__String::createWithFormat("%d", bestScore)->_string, "fonts/robo.ttf", 6);
+	auto bestScoreSprite = cocos2d::Label::createWithTTF(__String::createWithFormat("%d", -this->bestScore)->_string, "fonts/robo.ttf", 8);
 	bestScoreSprite->setColor(Color3B(176, 19, 19));
-	bestScoreSprite->setAnchorPoint(Point(1, 1));
-	bestScoreSprite->setPosition(scorepanelSprite->getContentSize().width - 28 ,
-		50);
+	bestScoreSprite->setPosition(scorepanelSprite->getContentSize().width/2, scorepanelSprite->getContentSize().height * 0.16f);
 	scorepanelSprite->addChild(bestScoreSprite);
 	
-	
-	string medalsName = this->getMedalsName(currentScore);
-	if(medalsName != "") {
-		Sprite* medalsSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName(medalsName));
-		medalsSprite->addChild(this->blink);
-		medalsSprite->setPosition(54, 58);
-		scorepanelSprite->addChild(medalsSprite);
-	}
-	
-	//if the current score is higher than the best score.
-	//the panel will appear a "new" tag.
-	if(this->isNewRecord){
-		Sprite* newTagSprite = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("new.png"));
-		newTagSprite->setPosition(-16, 12);
-		bestScoreSprite->addChild(newTagSprite);
-	}
-	
 	// Start next action
-	auto scorePanelMoveTo = MoveTo::create(0.8f ,Point(this->originPoint.x + this->visibleSize.width / 2,this->originPoint.y + this->visibleSize.height/2 - 10.0f));
+	auto scorePanelMoveTo = MoveTo::create(0.8f ,Point(this->originPoint.x + this->visibleSize.width / 2,this->originPoint.y + this->visibleSize.height * 0.55f));
 	// add variable motion for the action
 	EaseExponentialOut* sineIn = EaseExponentialOut::create(scorePanelMoveTo);
 	CallFunc *actionDone = CallFunc::create(bind(&StatusLayer::fadeInRestartBtn, this));
@@ -158,106 +145,23 @@ void StatusLayer::jumpToScorePanel()
 
 void StatusLayer::fadeInRestartBtn()
 {
-	Node * tmpNode = Node::create();
-	
 	//create the restart menu;
-	Sprite* restartBtn = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_play.png"));
-	Sprite* restartBtnActive = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_play.png"));
-	restartBtnActive->setPositionY(-0.5f);
-	auto  menuItem = MenuItemSprite::create(restartBtn,restartBtnActive,NULL,CC_CALLBACK_1(StatusLayer::menuRestartCallback,this));
-	auto menu = Menu::create(menuItem, NULL);
-	menu->setPosition(Point(this->originPoint.x + this->visibleSize.width * 0.35f, this->originPoint.y + this->visibleSize.height * 0.26f));
-	tmpNode->addChild(menu);
+	auto restart = MyMenuItem::create(Sprite::createWithSpriteFrameName("button_play.png"), CC_CALLBACK_0(StatusLayer::menuRestartCallback, this));
+	restart->setPosition(Point(this->originPoint.x + this->visibleSize.width * 0.2f, this->originPoint.y + this->visibleSize.height * 0.26f));
 	
-	//create the rate button. however ,this button is not available yet = =
-	Sprite* rateBtn = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("button_score.png"));
-	rateBtn->setPosition(Point(this->originPoint.x + this->visibleSize.width * 0.65f, this->originPoint.y + this->visibleSize.height * 0.26f));
-	tmpNode->addChild(rateBtn);
-	this->addChild(tmpNode);
+	auto rate = MyMenuItem::create(Sprite::createWithSpriteFrameName("button_rate.png"), CC_CALLBACK_0(StatusLayer::menuRateCallback,this));
+	rate->setPosition(Point(this->originPoint.x + this->visibleSize.width * 0.5f, this->originPoint.y + this->visibleSize.height * 0.26f));
 	
-	//fade in the two buttons
-	auto fadeIn = FadeIn::create(0.1f);
-	//tmpNode->stopAllActions();
-	//tmpNode->runAction(fadeIn);
-
-	CallFunc *actionDone = CallFunc::create(bind(&StatusLayer::refreshScoreCallback,this));
-	auto sequence = Sequence::createWithTwoActions(fadeIn,actionDone);
-	tmpNode->stopAllActions();
-	tmpNode->runAction(sequence);
-}
-
-void StatusLayer::refreshScoreCallback()
-{
-	this->tmpScore = 0;
-	schedule(schedule_selector(StatusLayer::refreshScoreExecutor),0.1f);
-}
-
-void StatusLayer::refreshScoreExecutor(float dt)
-{
-	if(this->getChildByTag(CURRENT_SCORE_SPRITE_TAG))
-		this->removeChildByTag(CURRENT_SCORE_SPRITE_TAG);
+	auto share = MyMenuItem::create(Sprite::createWithSpriteFrameName("button_share.png"), CC_CALLBACK_0(StatusLayer::menuShareCallback,this));
+	share->setPosition(Point(this->originPoint.x + this->visibleSize.width * 0.8f, this->originPoint.y + this->visibleSize.height * 0.26f));
 	
-	scoreSprite->setString(__String::createWithFormat("%d", tmpScore)->_string);
-	scoreSprite->setAnchorPoint(Point(1,0));
-	scoreSprite->setPosition(Point(this->screeenSize.width * 0.74f, this->originPoint.y + this->visibleSize.height *  1 / 2));
-	scoreSprite->setTag(CURRENT_SCORE_SPRITE_TAG);
-	this->addChild(scoreSprite,1000);
-	this->tmpScore++;
-	if(this->tmpScore > this->currentScore)
-		unschedule(schedule_selector(StatusLayer::refreshScoreExecutor));
+	auto menu = Menu::create(restart, rate, share, NULL);
+	menu->setAnchorPoint(Vec2::ZERO);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu);
 }
 
-void StatusLayer::setBlinkSprite()
-{
-	this->blink = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("blink_00.png"));
-	Animation *animation = Animation::create();
-	animation->setDelayPerUnit(0.1f);
-	for (int i = 0; i < 3; i++)
-	{
-		const char *filename = String::createWithFormat("blink_%02d.png", i)->getCString();
-		SpriteFrame *frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(filename);
-		animation->addSpriteFrame(frame);
-	}
-	for (int i = 2; i >= 0; i--)
-	{
-		const char *filename = String::createWithFormat("blink_%02d.png", i)->getCString();
-		SpriteFrame *frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(filename);
-		animation->addSpriteFrame(frame);
-	}
-	auto animate = Animate::create(animation);
-	auto actionDone = CallFunc::create(bind(&StatusLayer::blinkAction,this));
-	auto sequence = Sequence::createWithTwoActions(animate, actionDone);
-	blink->runAction(RepeatForever::create(sequence));
-}
-
-void StatusLayer::blinkAction()
-{
-	if(this->blink && this->blink->getParent())
-	{
-		Size activeSize = this->blink->getParent()->getContentSize();
-		this->blink->setPosition(rand()%((int)(activeSize.width)), rand()%((int)(activeSize.height)));
-	}
-}
-
-string StatusLayer::getMedalsName(int score)
-{
-	this->setBlinkSprite();
-
-	//display the golden silver or bronze iron
-	string medalsName = "";
-	if(this->currentScore >=10 && this->currentScore < 20){//iron medals
-		medalsName = "medals_0";
-	}else if(this->currentScore >= 20 && currentScore < 30){//bronze medals
-		medalsName = "medals_1";
-	}else if(currentScore >=30 && currentScore < 50){//silver medals
-		medalsName = "medals_2";
-	}else if(currentScore >=50){//golden medals
-		medalsName = "medals_3";
-	}
-	return medalsName;
-}
-
-void StatusLayer::menuRestartCallback(Ref* pSender)
+void StatusLayer::menuRestartCallback()
 {
 	if (AppDelegate::pluginAnalytics != nullptr)
 		AppDelegate::pluginAnalytics->logEvent("click_restart");
@@ -266,4 +170,20 @@ void StatusLayer::menuRestartCallback(Ref* pSender)
 	auto scene = GameScene::create();
 	TransitionScene *transition = TransitionFade::create(1, scene);
 	Director::getInstance()->replaceScene(transition);
+}
+
+void StatusLayer::menuRateCallback()
+{
+	if (AppDelegate::pluginAnalytics != nullptr)
+		AppDelegate::pluginAnalytics->logEvent("click_rate");
+	
+	helpers::URL::open((char*) "https://play.google.com/store/apps/details?id=com.hatersallover.victo.rush");
+}
+
+void StatusLayer::menuShareCallback()
+{
+	if (AppDelegate::pluginAnalytics != nullptr)
+		AppDelegate::pluginAnalytics->logEvent("click_share");
+	
+	helpers::URL::open((char*) "https://www.facebook.com/sharer.php?u=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.hatersallover.victo.rush");
 }

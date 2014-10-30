@@ -10,10 +10,6 @@ using namespace std;
 using namespace cocos2d;
 using namespace CocosDenshion;
 
-const string NUMBER_SCORE = "number_score";
-const string NUMBER_FONT = "font";
-const int CURRENT_SCORE_SPRITE_TAG = 10001;
-
 class StatusLayer : public Layer, public StatusDelegate
 {
 public:
@@ -48,19 +44,11 @@ private:
 
 	void fadeInRestartBtn();
 
-	void refreshScoreCallback();
+	void menuRestartCallback();
 
-	void refreshScoreExecutor(float dt);
+	void menuRateCallback();
 
-	string getMedalsName(int score);
-
-	Sprite* blink;
-
-	void setBlinkSprite();
-
-	void blinkAction();
-
-	void menuRestartCallback(Ref *sender);
+	void menuShareCallback();
 
 	Label* scoreSprite;
 

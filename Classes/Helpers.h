@@ -3,15 +3,7 @@
 
 #include "cocos2d.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include <jni.h>
-#include <android/log.h>
-#include "platform/android/jni/JniHelper.h"
-#endif
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#include <AudioToolbox/AudioServices.h>
-#endif
+namespace helpers {
 
 #define CLASS_NAME "org/cocos2dx/lib/Cocos2dxHelper"
 
@@ -36,4 +28,5 @@ public:
 	static void getMusic();
 };
 
+}; // namespace helpers {
 #endif // __HELPERS_H__

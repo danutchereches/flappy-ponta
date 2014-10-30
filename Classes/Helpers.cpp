@@ -1,5 +1,17 @@
 #include "Helpers.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include <android/log.h>
+#include "platform/android/jni/JniHelper.h"
+#endif
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include <AudioToolbox/AudioServices.h>
+#endif
+
+namespace helpers {
+
 void Vibrator::vibrate(int time)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -75,3 +87,5 @@ void Dialog::getMusic()
 	}
 #endif
 }
+
+}; // namespace helpers {

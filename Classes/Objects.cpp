@@ -1,36 +1,23 @@
 #include "Objects.h"
 
-MyMenuItem* MyMenuItem::create(cocos2d::Node* icon, cocos2d::Sprite* bg, const cocos2d::ccMenuCallback& callback)
+MyMenuItem* MyMenuItem::create(cocos2d::Node* sprite, const cocos2d::ccMenuCallback& callback)
 {
-	return create(icon, nullptr, bg, callback);
+	return create(sprite, nullptr, callback);
 }
 
-MyMenuItem* MyMenuItem::create(cocos2d::Node* enabledIcon, cocos2d::Node* disabledIcon, cocos2d::Sprite* bg, const cocos2d::ccMenuCallback& callback)
+MyMenuItem* MyMenuItem::create(cocos2d::Node* enabledSprite, cocos2d::Node* disabledSprite, const cocos2d::ccMenuCallback& callback)
 {
 	MyMenuItem* ret = new MyMenuItem();
-	ret->initWithNormalSprite(bg, nullptr, nullptr, callback);
+	ret->initWithNormalSprite(enabledSprite, nullptr, disabledSprite, callback);
 	ret->mEnabled = true;
-	ret->mIconEnabled = enabledIcon;
-	ret->mIconDisabled = disabledIcon;
 	ret->autorelease();
-	ret->setCascadeOpacityEnabled(true);
-	
-	ret->mIconEnabled->setPosition(ret->getContentSize().width/2, ret->getContentSize().height/2);
-	ret->addChild(ret->mIconEnabled);
-	if (ret->mIconDisabled)
-	{
-		ret->mIconDisabled->setPosition(ret->getContentSize().width/2, ret->getContentSize().height/2);
-		ret->mIconDisabled->setVisible(false);
-		ret->addChild(ret->mIconDisabled);
-	}
 	
 	return ret;
 }
 
-
 void MyMenuItem::selected()
 {
-//	MenuItem::selected();
+	MenuItem::selected();
 	
 	runAction(cocos2d::Sequence::create(
 			cocos2d::ScaleTo::create(0.07f, 0.9f),
@@ -59,11 +46,9 @@ void MyMenuItem::setEnabled(bool state)
 	if (state != mEnabled)
 	{
 		mEnabled = state;
-		if (mIconDisabled)
-		{
-			mIconEnabled->setVisible(mEnabled);
-			mIconDisabled->setVisible(!mEnabled);
-		}
+		_normalImage->setVisible(mEnabled);
+		if (_disabledImage)
+			_disabledImage->setVisible(!mEnabled);
 	}
 }
 

@@ -6,8 +6,8 @@
 class MyMenuItem : public cocos2d::MenuItemSprite
 {
 public:
-	static MyMenuItem* create(cocos2d::Node* icon, cocos2d::Sprite* bg, const cocos2d::ccMenuCallback& callback);
-	static MyMenuItem* create(cocos2d::Node* enabledIcon, cocos2d::Node* disabledIcon, cocos2d::Sprite* bg, const cocos2d::ccMenuCallback& callback);
+	static MyMenuItem* create(cocos2d::Node* sprite, const cocos2d::ccMenuCallback& callback);
+	static MyMenuItem* create(cocos2d::Node* enabledSprite, cocos2d::Node* disabledSprite, const cocos2d::ccMenuCallback& callback);
 	
 	void selected() override;
 	void unselected() override;
@@ -17,8 +17,6 @@ public:
 	void setEnabled(bool state);
 private:
 	bool mEnabled;
-	cocos2d::Node* mIconEnabled;
-	cocos2d::Node* mIconDisabled;
 };
 
 class Tile : public cocos2d::MenuItem
