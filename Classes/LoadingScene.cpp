@@ -36,6 +36,8 @@ void LoadingScene::load(float dt)
 	
 	unschedule(schedule_selector(LoadingScene::load));
 	
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("mfx/imn.mp3");
+	
 	auto scene = WelcomeScene::create();
 	cocos2d::TransitionScene* transition = cocos2d::TransitionFade::create(1, scene);
 	cocos2d::Director::getInstance()->replaceScene(transition);

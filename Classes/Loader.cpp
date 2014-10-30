@@ -27,7 +27,7 @@ void Loader::loadSounds()
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sfx_swooshing.ogg");
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sfx_wing.ogg");
 	
-//	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("mfx/");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("mfx/imn.mp3");
 }
 
 void Loader::loadTextures()
