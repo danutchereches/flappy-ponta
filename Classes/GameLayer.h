@@ -39,7 +39,7 @@ const int PIP_HEIGHT = 100;
 /**
  * The width of the pips
  */
-const int PIP_WIDTH = 52;
+const int PIP_WIDTH = 10;
 
 /**
  * Pip shift speed
@@ -54,12 +54,12 @@ const int PIP_DISTANCE = 40;
 /**
  * The distance between the pips vertical
  */
-const int PIP_INTERVAL = 80;
+const int PIP_INTERVAL = 70;
 
 /**
  * The number of pip pairs display in the screen in the same time
  */
-const int PIP_COUNT = 2;
+const int PIP_COUNT = 3;
 
 /**
  * The distance that the pip will display in the screen, for player to ready

@@ -105,12 +105,19 @@ void GameLayer::scrollLand(float dt)
 	for (auto singlePip : this->pips)
 	{
 		singlePip->setPositionX(singlePip->getPositionX() - 0.7f);
-		if(singlePip->getPositionX() < -PIP_WIDTH)
+	}
+	
+	if (this->pips.size() > 1)
+	{
+		auto front = this->pips.front();
+		if(front->getPositionX() < -PIP_WIDTH)
 		{
-			singlePip->setTag(PIP_NEW);
+			front->setTag(PIP_NEW);
 			Size screenSize = Director::getInstance()->getWinSize();
-			singlePip->setPositionX(screenSize.width);
-			singlePip->setPositionY(this->getRandomHeight());
+			front->setPositionX(this->pips.back()->getPositionX() + PIP_INTERVAL * 0.8f + rand() % (int) (PIP_INTERVAL * 0.5f));
+			front->setPositionY(this->getRandomHeight());
+			this->pips.erase(this->pips.begin());
+			this->pips.push_back(front);
 		}
 	}
 }
@@ -121,7 +128,8 @@ void GameLayer::onTouch()
 		return;
 	
 	SimpleAudioEngine::getInstance()->playEffect("sfx_wing.ogg");
-	if(this->gameStatus == GAME_STATUS_READY) {
+	if(this->gameStatus == GAME_STATUS_READY)
+	{
 		this->delegator->onGameStart();
 		this->bird->fly();
 		this->gameStatus = GAME_STATUS_START;
@@ -155,16 +163,18 @@ void GameLayer::createPips()
 	for (int i = 0; i < PIP_COUNT; i++)
 	{
 		Size screenSize = Director::getInstance()->getWinSize();
+		
 		Sprite *pipUp = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("tub.png"));
 		pipUp->setScaleY(-1);
+		
 		Sprite *pipDown = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("tub.png"));
-		Node *singlePip = Node::create();
+		pipDown->setPosition(0, PIP_HEIGHT + PIP_DISTANCE);
 		
 		// bind to pair
-		pipDown->setPosition(0, PIP_HEIGHT + PIP_DISTANCE);
+		Node *singlePip = Node::create();
 		singlePip->addChild(pipDown, 0, DOWN_PIP);
 		singlePip->addChild(pipUp, 0, UP_PIP);
-		singlePip->setPosition(screenSize.width + i*PIP_INTERVAL + WAIT_DISTANCE, this->getRandomHeight());
+		singlePip->setPosition(screenSize.width + WAIT_DISTANCE + (PIP_INTERVAL * 0.8f + rand() % (int) PIP_INTERVAL) * i, this->getRandomHeight());
 		auto body = PhysicsBody::create();
 		auto shapeBoxDown = PhysicsShapeBox::create(pipDown->getContentSize(),PHYSICSSHAPE_MATERIAL_DEFAULT, Point(0, PIP_HEIGHT + PIP_DISTANCE));
 		body->addShape(shapeBoxDown);
