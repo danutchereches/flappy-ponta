@@ -15,8 +15,6 @@ bool StatusLayer::init()
 	this->bestScore = 0;
 	this->currentScore = 0;
 	this->isNewRecord = false;
-	Number::getInstance()->loadNumber(NUMBER_FONT.c_str(), "font_0%02d.png", 48);
-	Number::getInstance()->loadNumber(NUMBER_SCORE.c_str(), "number_score_%02d.png");
 	this->visibleSize = Director::getInstance()->getVisibleSize();
 	this->originPoint = Director::getInstance()->getVisibleOrigin();
 	this->screeenSize = Director::getInstance()->getWinSize();
@@ -27,7 +25,8 @@ bool StatusLayer::init()
 
 void StatusLayer::showReadyStatus()
 {
-	scoreSprite = (Sprite *)Number::getInstance()->convert(NUMBER_FONT.c_str(), 0);
+	scoreSprite = cocos2d::Label::createWithTTF("0", "fonts/robo.ttf", 10);
+	scoreSprite->setColor(Color3B(176, 19, 19));
 	scoreSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2,this->originPoint.y + this->visibleSize.height *5/6));
 	this->addChild(scoreSprite);
 	
@@ -70,10 +69,7 @@ void StatusLayer::onGameStart()
 
 void StatusLayer::onGamePlaying(int score)
 {
-	this->removeChild(scoreSprite);
-	this->scoreSprite = (Sprite* )Number::getInstance()->convert(NUMBER_FONT.c_str(), score);
-	scoreSprite->setPosition(Point(this->originPoint.x + this->visibleSize.width / 2,this->originPoint.y + this->visibleSize.height *5/6));
-	this->addChild(scoreSprite);
+	this->scoreSprite->setString(__String::createWithFormat("%d", score)->_string);
 }
 
 void StatusLayer::onGameEnd(int curScore, int bestScore)
@@ -125,7 +121,8 @@ void StatusLayer::jumpToScorePanel()
 	this->addChild(scorepanelSprite);
 		
 	//display the  best score on the score panel
-	auto bestScoreSprite = (Sprite *)Number::getInstance()->convert(NUMBER_SCORE.c_str(), this->bestScore, Gravity::GRAVITY_RIGHT);
+	auto bestScoreSprite = cocos2d::Label::createWithTTF(__String::createWithFormat("%d", bestScore)->_string, "fonts/robo.ttf", 6);
+	bestScoreSprite->setColor(Color3B(176, 19, 19));
 	bestScoreSprite->setAnchorPoint(Point(1, 1));
 	bestScoreSprite->setPosition(scorepanelSprite->getContentSize().width - 28 ,
 		50);
@@ -200,7 +197,7 @@ void StatusLayer::refreshScoreExecutor(float dt)
 	if(this->getChildByTag(CURRENT_SCORE_SPRITE_TAG))
 		this->removeChildByTag(CURRENT_SCORE_SPRITE_TAG);
 	
-	scoreSprite = (Sprite *)Number::getInstance()->convert(NUMBER_SCORE.c_str(), this->tmpScore, Gravity::GRAVITY_RIGHT);
+	scoreSprite->setString(__String::createWithFormat("%d", tmpScore)->_string);
 	scoreSprite->setAnchorPoint(Point(1,0));
 	scoreSprite->setPosition(Point(this->screeenSize.width * 0.74f, this->originPoint.y + this->visibleSize.height *  1 / 2));
 	scoreSprite->setTag(CURRENT_SCORE_SPRITE_TAG);

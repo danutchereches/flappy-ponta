@@ -3,7 +3,6 @@
 #include "cocos2d.h"
 #include "Objects.h"
 #include "GameScene.h"
-#include "Number.h"
 #include "SimpleAudioEngine.h"
 #include <cstdlib>
 
@@ -63,7 +62,7 @@ private:
 
 	void menuRestartCallback(Ref *sender);
 
-	Sprite* scoreSprite;
+	Label* scoreSprite;
 
 	Sprite* getreadySprite;
 

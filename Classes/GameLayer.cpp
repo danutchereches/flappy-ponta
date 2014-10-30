@@ -158,6 +158,19 @@ void GameLayer::scrollLand(float dt)
 		banutz = *iter;
 		banutz->setPositionX(banutz->getPositionX() - 0.7f);
 	}
+	
+	if (this->banutzs.size() > 1)
+	{
+		auto front = this->banutzs.front();
+		if(front->getPositionX() < -PIP_WIDTH)
+		{
+			front->setTag(BANUTZ_LUAT_TAG);
+			front->setVisible(false);
+			front->stopAllActions();
+			banutzs.eraseObject(front, true);
+			mBanutPool.recyclePoolItem(front);
+		}
+	}
 }
 
 void GameLayer::onTouch()
@@ -255,7 +268,7 @@ void GameLayer::checkHit()
 			this->delegator->onGamePlaying(this->mScore);
 			banutz->setTag(BANUTZ_LUAT_TAG);
 			banutz->setVisible(false);
-			
+			banutz->stopAllActions();
 			banutzs.eraseObject(banutz, true);
 			mBanutPool.recyclePoolItem(banutz);
 			break;

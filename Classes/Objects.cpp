@@ -101,7 +101,6 @@ void BanutzPool::init(int capacity, cocos2d::SpriteFrame* spriteFrame, cocos2d::
 cocos2d::Sprite* BanutzPool::onAllocatePoolItem()
 {
 	cocos2d::Sprite* sprite = cocos2d::Sprite::createWithSpriteFrame(mSpriteFrame);
-	sprite->stopAllActions();
 	sprite->setVisible(false);
 	sprite->pause();
 	mParent->addChild(sprite);

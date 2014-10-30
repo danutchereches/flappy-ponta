@@ -63,7 +63,6 @@ GAME_SRC
   Classes/GameScene.cpp
   Classes/LoadingScene.cpp
   Classes/MenuScene.cpp
-  Classes/Number.cpp
   Classes/OptionLayer.cpp
   Classes/StatusLayer.cpp
   Classes/UserRecord.cpp
