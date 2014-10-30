@@ -19,6 +19,7 @@ using namespace CocosDenshion;
 const int UP_PIP = 21;
 
 const int DOWN_PIP = 12;
+const int MILITIA = 13;
 
 const int PIP_PASS = 30;
 
@@ -38,6 +39,8 @@ const int BIRD_RADIUS = 7;
  */
 const int PIP_HEIGHT = 100;
 
+const int MILITIA_HEIGHT = 20;
+
 /**
  * The width of the pips
  */
@@ -56,7 +59,7 @@ const int PIP_DISTANCE = 40;
 /**
  * The distance between the pips vertical
  */
-const int PIP_INTERVAL = 80;
+const int PIP_INTERVAL = 100;
 
 /**
  * The number of pip pairs display in the screen in the same time

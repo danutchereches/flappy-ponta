@@ -141,11 +141,12 @@ void GameLayer::scrollLand(float dt)
 	if (this->pips.size() > 1)
 	{
 		auto front = this->pips.front();
-		if(front->getPositionX() < -PIP_WIDTH)
+		if(front->getPositionX() < -PIP_WIDTH*2)
 		{
 			front->setTag(PIP_NEW);
 			front->setPositionX(this->pips.back()->getPositionX() + PIP_INTERVAL * 0.8f + rand() % (int) (PIP_INTERVAL * 0.3f));
-			front->setPositionY(this->getRandomHeight());
+			if (front->getChildByTag(MILITIA) == nullptr)
+				front->setPositionY(this->getRandomHeight());
 			this->pips.erase(this->pips.begin());
 			this->pips.pushBack(front);
 		}
@@ -211,25 +212,47 @@ void GameLayer::update(float delta)
 void GameLayer::createPips()
 {
 	// Create the pips
-	for (int i = 0; i < PIP_COUNT; i++)
+	Sprite *pipUp = Sprite::createWithSpriteFrameName("tub.png");
+	pipUp->setPosition(0, MILITIA_HEIGHT + PIP_DISTANCE + 35);
+	pipUp->setScaleY(-1);
+	
+	Sprite *pipDown = Sprite::createWithSpriteFrameName("militia.png");
+	pipDown->setPosition(0, 0);
+	
+	// bind to pair
+	Node *singlePip = Node::create();
+	singlePip->addChild(pipDown, 0, MILITIA);
+	singlePip->addChild(pipUp, 0, UP_PIP);
+	singlePip->setPosition(mScreenSize.width + WAIT_DISTANCE, 40);
+	auto body = PhysicsBody::create();
+	body->addShape(PhysicsShapeBox::create(Size(pipDown->getContentSize().width, 10), PHYSICSSHAPE_MATERIAL_DEFAULT, Vec2(0, -5)));
+	body->addShape(PhysicsShapeBox::create(Size(pipDown->getContentSize().width * 0.44f, 7), PHYSICSSHAPE_MATERIAL_DEFAULT, Vec2(2, 4)));
+	body->addShape(PhysicsShapeBox::create(pipUp->getContentSize(),PHYSICSSHAPE_MATERIAL_DEFAULT, pipUp->getPosition()));
+	body->setContactTestBitmask(0xFFFFFFFF);
+	body->setDynamic(false);
+	singlePip->setPhysicsBody(body);
+	singlePip->setTag(PIP_NEW);
+	
+	this->addChild(singlePip);
+	this->pips.pushBack(singlePip);
+	
+	for (int i = 1; i < PIP_COUNT; i++)
 	{
-		Size screenSize = Director::getInstance()->getWinSize();
-		
-		Sprite *pipUp = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("tub.png"));
+		pipUp = Sprite::createWithSpriteFrameName("tub.png");
+		pipUp->setPosition(0, PIP_HEIGHT + PIP_DISTANCE);
 		pipUp->setScaleY(-1);
 		
-		Sprite *pipDown = Sprite::createWithSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("tub.png"));
-		pipDown->setPosition(0, PIP_HEIGHT + PIP_DISTANCE);
+		pipDown = Sprite::createWithSpriteFrameName("tub.png");
+		pipDown->setPosition(0, 0);
 		
 		// bind to pair
-		Node *singlePip = Node::create();
+		singlePip = Node::create();
 		singlePip->addChild(pipDown, 0, DOWN_PIP);
 		singlePip->addChild(pipUp, 0, UP_PIP);
-		singlePip->setPosition(screenSize.width + WAIT_DISTANCE + (PIP_INTERVAL * 0.8f + rand() % (int) (PIP_INTERVAL * 0.3f)) * i, this->getRandomHeight());
+		singlePip->setPosition(mScreenSize.width + WAIT_DISTANCE + (PIP_INTERVAL * 0.8f + rand() % (int) (PIP_INTERVAL * 0.3f)) * i, this->getRandomHeight());
 		auto body = PhysicsBody::create();
-		auto shapeBoxDown = PhysicsShapeBox::create(pipDown->getContentSize(),PHYSICSSHAPE_MATERIAL_DEFAULT, Point(0, PIP_HEIGHT + PIP_DISTANCE));
-		body->addShape(shapeBoxDown);
-		body->addShape(PhysicsShapeBox::create(pipUp->getContentSize()));
+		body->addShape(PhysicsShapeBox::create(pipDown->getContentSize()));
+		body->addShape(PhysicsShapeBox::create(pipUp->getContentSize(),PHYSICSSHAPE_MATERIAL_DEFAULT, pipUp->getPosition()));
 		body->setContactTestBitmask(0xFFFFFFFF);
 		body->setDynamic(false);
 		singlePip->setPhysicsBody(body);
