@@ -185,5 +185,5 @@ void StatusLayer::menuShareCallback()
 	if (AppDelegate::pluginAnalytics != nullptr)
 		AppDelegate::pluginAnalytics->logEvent("click_share");
 	
-	helpers::URL::open((char*) "https://www.facebook.com/sharer.php?u=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.hatersallover.victo.rush");
+	helpers::URL::open((char*) "https://www.facebook.com/sharer.php?u=http://goo.gl/c1M4YW");
 }
