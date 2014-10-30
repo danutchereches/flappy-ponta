@@ -129,7 +129,7 @@ void GameLayer::scrollLand(float dt)
 			Sprite* banutz = mBanutPool.obtainPoolItem();
 			banutz->setVisible(true);
 			banutz->runAction(cocos2d::RepeatForever::create(cocos2d::Animate::create(banutzAnumation)));
-			banutz->setPosition(cocos2d::Vec2(pip->getPositionX() + PIP_INTERVAL * 0.5f, mScreenSize.height * 0.3f + rand() % (int) (mScreenSize.height * 0.6f)));
+			banutz->setPosition(cocos2d::Vec2(pip->getPositionX() + PIP_INTERVAL * 0.5f, mScreenSize.height * 0.4f + rand() % (int) (mScreenSize.height * 0.6f)));
 			banutz->setTag(BANUTZ_TAG);
 			banutz->resume();
 			banutzs.pushBack(banutz);
