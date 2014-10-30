@@ -4,17 +4,20 @@ GameLayer::GameLayer(){}
 
 GameLayer::~GameLayer(){}
 
+cocos2d::Animation* banutzAnumation;
+
 bool GameLayer::init()
 {
 	if (!Layer::init())
 		return false;
 	
-	//get the origin point of the X-Y axis, and the visiable size of the screen
-	Size visiableSize = Director::getInstance()->getVisibleSize();
-	Point origin = Director::getInstance()->getVisibleOrigin();
+	//get the mOrigin point of the X-Y axis, and the visiable size of the screen
+	mScreenSize = Director::getInstance()->getWinSize();
+	mVisibleSize = Director::getInstance()->getVisibleSize();
+	mOrigin = Director::getInstance()->getVisibleOrigin();
 	
 	this->gameStatus = GAME_STATUS_READY;
-	this->score = 0;
+	this->mScore = 0;
 	
 	// Add the bird
 	this->bird = BirdSprite::getInstance();
@@ -27,7 +30,7 @@ bool GameLayer::init()
 	body->setContactTestBitmask(0xFFFFFFFF);
 	body->setPositionOffset(cocos2d::Vec2(2.5f, 0));
 	this->bird->setPhysicsBody(body);
-	this->bird->setPosition(origin.x + visiableSize.width*1/3 - 5,origin.y + visiableSize.height/2 + 5);
+	this->bird->setPosition(mOrigin.x + mVisibleSize.width*1/3 - 5,mOrigin.y + mVisibleSize.height/2 + 5);
 	this->bird->idle();
 	this->addChild(this->bird);
 	
@@ -54,6 +57,18 @@ bool GameLayer::init()
 	this->landSpite2->setAnchorPoint(Point::ZERO);
 	this->landSpite2->setPosition(this->landSpite1->getContentSize().width-2.0f,0);
 	this->addChild(this->landSpite2, 30);
+	
+	Vector<SpriteFrame*> frames;
+	frames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("banut1.png"));
+	frames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("banut2.png"));
+	frames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("banut3.png"));
+	frames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("banut4.png"));
+	banutzAnumation = cocos2d::Animation::createWithSpriteFrames(frames, 0.1f);
+	banutzAnumation->retain();
+	
+	SpriteFrame* banutFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("banut1.png");
+	
+	mBanutPool.init(5, banutFrame, this);
 	
 	shiftLand = schedule_selector(GameLayer::scrollLand);
 	this->schedule(shiftLand, 0.01f);
@@ -85,7 +100,8 @@ bool GameLayer::onContactBegin(const PhysicsContact& contact)
 		{
 			this->bird->getPhysicsBody()->setVelocity(Vect(0, 40));
 		}
-		else
+		else/* if (contact.getShapeA()->getBody()->getNode()->getTag() == PIP_NEW
+		 || contact.getShapeB()->getBody()->getNode()->getTag() == PIP_NEW)*/
 		{
 			this->gameOver();
 		}
@@ -102,9 +118,24 @@ void GameLayer::scrollLand(float dt)
 		this->landSpite1->setPositionX(0);
 	
 	// move the pips
-	for (auto singlePip : this->pips)
+	Node* pip;
+	for (cocos2d::Vector<Node*>::iterator iter = this->pips.begin(); iter != this->pips.end(); iter++)
 	{
-		singlePip->setPositionX(singlePip->getPositionX() - 0.7f);
+		pip = *iter;
+		pip->setPositionX(pip->getPositionX() - 0.7f);
+		
+		if (pip->getTag() == PIP_NEW && pip->getPositionX() < mScreenSize.width)
+		{
+			Sprite* banutz = mBanutPool.obtainPoolItem();
+			banutz->setVisible(true);
+			banutz->runAction(cocos2d::RepeatForever::create(cocos2d::Animate::create(banutzAnumation)));
+			banutz->setPosition(cocos2d::Vec2(pip->getPositionX() + PIP_INTERVAL * 0.5f, mScreenSize.height * 0.3f + rand() % (int) (mScreenSize.height * 0.6f)));
+			banutz->setTag(BANUTZ_TAG);
+			banutz->resume();
+			banutzs.pushBack(banutz);
+			
+			pip->setTag(PIP_PASS);
+		}
 	}
 	
 	if (this->pips.size() > 1)
@@ -113,12 +144,19 @@ void GameLayer::scrollLand(float dt)
 		if(front->getPositionX() < -PIP_WIDTH)
 		{
 			front->setTag(PIP_NEW);
-			Size screenSize = Director::getInstance()->getWinSize();
-			front->setPositionX(this->pips.back()->getPositionX() + PIP_INTERVAL * 0.8f + rand() % (int) (PIP_INTERVAL * 0.5f));
+			front->setPositionX(this->pips.back()->getPositionX() + PIP_INTERVAL * 0.8f + rand() % (int) (PIP_INTERVAL * 0.3f));
 			front->setPositionY(this->getRandomHeight());
 			this->pips.erase(this->pips.begin());
-			this->pips.push_back(front);
+			this->pips.pushBack(front);
 		}
+	}
+	
+	// move the banutzs
+	Node* banutz;
+	for (cocos2d::Vector<Sprite*>::iterator iter = this->banutzs.begin(); iter != this->banutzs.end(); iter++)
+	{
+		banutz = *iter;
+		banutz->setPositionX(banutz->getPositionX() - 0.7f);
 	}
 }
 
@@ -153,7 +191,7 @@ void GameLayer::update(float delta)
 	if (this->gameStatus == GAME_STATUS_START)
 	{
 		this->rotateBird();
-	//	this->checkHit();
+		this->checkHit();
 	}
 }
 
@@ -174,7 +212,7 @@ void GameLayer::createPips()
 		Node *singlePip = Node::create();
 		singlePip->addChild(pipDown, 0, DOWN_PIP);
 		singlePip->addChild(pipUp, 0, UP_PIP);
-		singlePip->setPosition(screenSize.width + WAIT_DISTANCE + (PIP_INTERVAL * 0.8f + rand() % (int) PIP_INTERVAL) * i, this->getRandomHeight());
+		singlePip->setPosition(screenSize.width + WAIT_DISTANCE + (PIP_INTERVAL * 0.8f + rand() % (int) (PIP_INTERVAL * 0.3f)) * i, this->getRandomHeight());
 		auto body = PhysicsBody::create();
 		auto shapeBoxDown = PhysicsShapeBox::create(pipDown->getContentSize(),PHYSICSSHAPE_MATERIAL_DEFAULT, Point(0, PIP_HEIGHT + PIP_DISTANCE));
 		body->addShape(shapeBoxDown);
@@ -185,29 +223,42 @@ void GameLayer::createPips()
 		singlePip->setTag(PIP_NEW);
 		
 		this->addChild(singlePip);
-		this->pips.push_back(singlePip);
+		this->pips.pushBack(singlePip);
 	}
 }
 
 int GameLayer::getRandomHeight()
 {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
-	return rand()%(int)(2*PIP_HEIGHT + PIP_DISTANCE - visibleSize.height);
+	return rand()%(int)(2*PIP_HEIGHT + PIP_DISTANCE - visibleSize.height - 15) + 15;
 }
 
 void GameLayer::checkHit()
 {
-	for(auto pip : this->pips)
+	Rect birdRect = Rect(this->bird->getPositionX() - 5, this->bird->getPositionY() - 5, 10, 10);
+	
+	for(auto banutz : this->banutzs)
 	{
-		if (pip->getTag() == PIP_NEW)
+		if (banutz->getTag() == BANUTZ_LUAT_TAG)
+			continue;
+		
+		Rect rect = cocos2d::Rect(
+			banutz->getPosition().x - (banutz->getContentSize().width * 0.7f / 2),
+			banutz->getPosition().y - (banutz->getContentSize().height * 0.7f / 2),
+			banutz->getContentSize().width * 0.7f,
+			banutz->getContentSize().height * 0.7f);
+		
+		if (rect.intersectsRect(birdRect))
 		{
-			if (pip->getPositionX() < this->bird->getPositionX())
-			{
-				SimpleAudioEngine::getInstance()->playEffect("sfx_point.ogg");
-				this->score ++;
-				this->delegator->onGamePlaying(this->score);
-				pip->setTag(PIP_PASS);
-			}
+			SimpleAudioEngine::getInstance()->playEffect("sfx_point.ogg");
+			this->mScore++;
+			this->delegator->onGamePlaying(this->mScore);
+			banutz->setTag(BANUTZ_LUAT_TAG);
+			banutz->setVisible(false);
+			
+			banutzs.eraseObject(banutz, true);
+			mBanutPool.recyclePoolItem(banutz);
+			break;
 		}
 	}
 }
@@ -221,10 +272,10 @@ void GameLayer::gameOver()
 	//get the best score
 	int bestScore = UserRecord::getInstance()->readIntegerFromUserDefault("best_score");
 	//update the best score
-	if(this->score > bestScore)
-		UserRecord::getInstance()->saveIntegerToUserDefault("best_score",this->score);
+	if(this->mScore > bestScore)
+		UserRecord::getInstance()->saveIntegerToUserDefault("best_score",this->mScore);
 	
-	this->delegator->onGameEnd(this->score, bestScore);
+	this->delegator->onGameEnd(this->mScore, bestScore);
 	this->unschedule(shiftLand);
 	SimpleAudioEngine::getInstance()->playEffect("sfx_die.ogg");
 	this->bird->die();

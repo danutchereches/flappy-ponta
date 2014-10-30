@@ -127,13 +127,24 @@ private:
 	int mUnrecycledItemCount;
 };
 
-class ObjectPool : public GenericPool<cocos2d::Sprite*>
+class SpritePool : public GenericPool<cocos2d::Sprite*>
 {
 public:
 	void init(int capacity, cocos2d::SpriteFrame* spriteFrame, cocos2d::Node* parent);
 protected:
 	cocos2d::Node* mParent;
 	cocos2d::SpriteFrame* mSpriteFrame;
+	cocos2d::Sprite* onAllocatePoolItem() override;
+};
+
+class BanutzPool : public GenericPool<cocos2d::Sprite*>
+{
+public:
+	void init(int capacity, cocos2d::SpriteFrame* spriteFrame, cocos2d::Node* parent);
+protected:
+	cocos2d::Node* mParent;
+	cocos2d::SpriteFrame* mSpriteFrame;
+	cocos2d::Sprite* onAllocatePoolItem() override;
 };
 
 class StatusDelegate {

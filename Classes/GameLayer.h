@@ -25,6 +25,8 @@ const int PIP_PASS = 30;
 const int PIP_NEW = 31;
 
 const int GROUND_TAG = 90;
+const int BANUTZ_TAG = 91;
+const int BANUTZ_LUAT_TAG = 92;
 
 /**
  * The radius of the bird
@@ -54,7 +56,7 @@ const int PIP_DISTANCE = 40;
 /**
  * The distance between the pips vertical
  */
-const int PIP_INTERVAL = 70;
+const int PIP_INTERVAL = 80;
 
 /**
  * The number of pip pairs display in the screen in the same time
@@ -144,17 +146,23 @@ private:
 	 */
 	void birdSpriteRemove();
 
+	cocos2d::Size mScreenSize;
+	cocos2d::Size mVisibleSize;
+	cocos2d::Vec2 mOrigin;
+
     PhysicsWorld *world;
 
     GameStatus gameStatus;
 
-    int score;
+    int mScore;
 
     BirdSprite *bird;
     
     Node *groundNode;
     
-    vector<Node *> pips;
+    cocos2d::Vector<Node*> pips;
+    cocos2d::Vector<Sprite*> banutzs;
+    BanutzPool mBanutPool;
     
     Sprite *landSpite1,*landSpite2;
 
